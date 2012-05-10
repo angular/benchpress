@@ -68,7 +68,7 @@ describe('$compile', function() {
         window.angular = null;
 
         suite.add({
-          name: version + ': simple binding',
+          name: version,
           defer: true,
           fn: function(deferred) {
             test();
@@ -76,25 +76,28 @@ describe('$compile', function() {
           },
           onStart: function(event) {
             var bench = event.target;
-            dump('start: ' + bench.name);
+            dump('start[' + bench.name + ']: ');
           },
           onComplete: function(event) {
             var bench = event.target;
             rootElement.remove();
-            dump('done: ' + bench.name + '; ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+            dump('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
                           bench.stats.rme.toFixed(2) + '%)');
           }
         });
       }
 
       // add suite listeners
-      suite.on('complete', function() {
-        dump('Fastest is ' + this.filter('fastest').pluck('name'));
+      suite.on('start', function() {
+        dump('------- single binding -------------');
+      }).on('complete', function() {
+        dump('------- single binding -------------');
+        //dump('Fastest is ' + this.filter('fastest').pluck('name'));
         this.forEach(function(bench) {
-          dump(bench.name + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+          dump(pad(bench.name, 9) + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
               bench.stats.rme.toFixed(2) + '%)');
         });
-        console.log('done!', this);
+        dump('----------------------------------\n');
       })
 
       // run async
@@ -107,4 +110,7 @@ describe('$compile', function() {
   });
 
 
+  function pad(string, length) {
+    return string + Array(length - string.length).join(' ');
+  }
 });

@@ -43,33 +43,43 @@ describe('$rootScope', function() {
         test = injector.invoke(actualSetup, null, {test: actualTest, angular: angular});
 
         suite.add({
-          name: version + ': empty $apply',
+          name: version,
           defer: false,
           fn: function() {
             test();
+          },
+          onStart: function(event) {
+            var bench = event.target;
+            dump('start[' + bench.name + ']: ');
+          },
+          onComplete: function(event) {
+            var bench = event.target;
+            dump('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+                          bench.stats.rme.toFixed(2) + '%)');
           }
         });
       }
 
       // add listeners
-      suite.on('cycle', function(event) {
-        dump('cycle: ' + event.target.name);
-        console.log(event.target.name);
-      })
-      .on('complete', function() {
-        dump('Fastest is ' + this.filter('fastest').pluck('name'));
+      suite.on('start', function() {
+        dump('------- empty $apply -------------');
+      }).on('complete', function() {
+        dump('------- empty $apply -------------');
+        //dump('Fastest is ' + this.filter('fastest').pluck('name'));
         this.forEach(function(bench) {
-          dump(bench.name + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+          dump(pad(bench.name, 9) + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
               bench.stats.rme.toFixed(2) + '%)');
         });
-        console.log('done!', this);
+        dump('----------------------------------\n');
       })
 
       // run sync
       .run({ 'async': false });
-      dump('after')
     });
   });
 
 
+  function pad(string, length) {
+    return string + Array(length - string.length).join(' ');
+  }
 });
