@@ -42,8 +42,12 @@ describe('$rootScope', function() {
         injector.invoke(assert, null, {setup: actualSetup, test: actualTest, angular: angular});
         test = injector.invoke(actualSetup, null, {test: actualTest, angular: angular});
 
-        suite.add(version + ': empty $apply', function() {
-          test();
+        suite.add({
+          name: version + ': empty $apply',
+          defer: false,
+          fn: function() {
+            test();
+          }
         });
       }
 
