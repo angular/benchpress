@@ -112,7 +112,7 @@ function benchmark(name, options) {
         dump(pad(bench.name, 9) + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
             bench.stats.rme.toFixed(2) + '%)');
       });
-      dump('----------------------------------\n');
+      dump('----------------------------------');
     })
 
     // run async
