@@ -1,0 +1,3 @@
+#!/bin/sh
+
+date >results; echo >>results; for f in `seq 1 10`; do node_modules/karma/bin/karma run | grep -a "'" | sed -s "s/^.*'\(.*\)'.*$/\1/" >>results; done
