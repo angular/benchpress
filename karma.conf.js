@@ -9,6 +9,7 @@ module.exports = function(config) {
     // optionally 'watched' only.
     files: [
       'benchmark.js',
+      'src/ng-bench.js',
       //'../build/angular.js',
       //'capture/capture-latest.js',
       'builds/angular-1.0.0rc8.js',
