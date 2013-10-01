@@ -1,0 +1,22 @@
+{
+  "name": "ng-bench",
+  "version": "0.0.0",
+  "description": "Benchmark test runner for Angular.",
+  "main": "benchmark.js",
+  "scripts": {
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jeffbcross/ng-bench"
+  },
+  "keywords": [
+    "performance",
+    "benchmark",
+    "angularjs"
+  ],
+  "author": "jbdeboer, jeffbcross, igorminar",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "b2a2e1635b22dedf15dff671aa4cb4154f0fcb44"
+}
