@@ -20,6 +20,7 @@
   "readmeFilename": "README.md",
   "gitHead": "b2a2e1635b22dedf15dff671aa4cb4154f0fcb44",
   "devDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "q": "~0.9.7"
   }
 }
