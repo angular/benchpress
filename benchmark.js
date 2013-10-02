@@ -738,6 +738,7 @@
       else {
         timer.stop(deferred);
         deferred.teardown();
+        //cycle(deferred);
         delay(clone, function() { cycle(deferred); });
       }
     }
@@ -1728,7 +1729,7 @@
 
         timer.stop = createFunction(
           interpolate('o#'),
-          interpolate('var n#=this.ns,s#=o#.timeStamp,${end};o#.elapsed=r#')
+          interpolate('var n#=this.ns,s#=o#.timeStamp,${end};o#.elapsed=r#;${begin};o#.endTimeStamp=s#')
         );
 
         // create compiled test
@@ -2053,9 +2054,14 @@
       if (clone.running) {
         // `minTime` is set to `Benchmark.options.minTime` in `clock()`
         cycles = ++clone.cycles;
-        clone.sampleStart = window.performance.now();
         clocked = deferred ? deferred.elapsed : clock(clone);
-        clone.sampleStop = window.performance.now();
+        if (deferred) {
+          clone.sampleStart = deferred.timeStamp;
+          clone.sampleStop = deferred.endTimeStamp;
+        } else {
+          clone.sampleStart = clone.timeStamp;
+          clone.sampleEnd = clone.endTimeStamp;
+        }
         minTime = clone.minTime;
 
         if (cycles > bench.cycles) {

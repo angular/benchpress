@@ -37,9 +37,13 @@ function benchmark(name, options) {
       suite.add({
         name: version,
         defer: true,
+        delay: 0,
         fn: function(deferred) {
           test();
-          deferred.resolve(); //TODO(i): we don't measure the rendering phase
+          setTimeout(function() {
+            deferred.resolve(); //TODO(i): we don't measure the rendering phase
+
+          }, 0);
         },
         onStart: function(event) {
           var bench = event.target;
