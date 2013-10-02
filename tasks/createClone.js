@@ -22,14 +22,14 @@ module.exports = function (grunt) {
           args: ['clone', repo]
         },
         function () {
-          deferred.resolve(sha);
+          deferred.resolve(repo, sha);
           done && done();
         });
       }
       else {
         grunt.log.writeln('angular.js repo already exists. (this is a good thing)');
 
-        deferred.resolve(sha);
+        deferred.resolve(repo, sha);
         done && done();
       }
     });

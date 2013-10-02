@@ -2,9 +2,11 @@ module.exports = function (grunt) {
   var q = require('q'),
       path = require('path'),
       exec = require('child_process').exec,
-      createClone = require('./tasks/createClone')(grunt);
+      createClone = require('./tasks/createClone')(grunt),
+      checkoutSHA = require('./tasks/checkoutSha')(grunt);
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
+    console.log('args', process.argv);
     var GIT_DIR = 'angular.js';
     var BUILD_DIR = 'builds';
     var DEFAULT_REPO = 'https://github.com/angular/angular.js';
@@ -32,37 +34,6 @@ module.exports = function (grunt) {
     //Repeat process for 2nd sha
     //Should this run the tests?
     //Should this help set up remotes?
-
-    function checkoutSHA (sha) {
-      var deferred = q.defer(),
-          remote = 'origin',
-          repoPath = path.resolve(GIT_DIR);
-
-      grunt.log.writeln('Step 2: Preparing to checkout sha', sha, 'to build a copy');
-
-      process.nextTick(function () {
-        grunt.log.writeln('Fetching remote...');
-        grunt.util.spawn({
-            cmd: 'git',
-            args: ['fetch', remote],
-            opts: {cwd: repoPath}
-          },
-          function () {
-            grunt.log.writeln('Checking out SHA', sha);
-            grunt.util.spawn({
-              cmd: 'git',
-              args: ['checkout', sha],
-              opts: {cwd: repoPath}
-            },
-            function (err, result, code) {
-              grunt.log.writeln('Done checkout: ', err, result, code);
-              deferred.resolve(sha);
-            });
-          });
-      });
-
-      return deferred.promise;
-    }
 
     function packageBuild (sha) {
       var deferred = q.defer();
