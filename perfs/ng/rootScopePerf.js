@@ -1,10 +1,13 @@
 describe('$rootScope', function() {
 
-  describe('$apply', function() {
+  ddescribe('$apply', function() {
 
+    var num = 0;
     benchmark('should benchmark empty $apply on single scope', {
       setup: function($injector, angular, $rootScope, bench) {
         return function() {
+          //console.log('bench ' + num++);
+
           bench($rootScope);
         }
       },

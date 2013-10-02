@@ -48,19 +48,24 @@ function benchmark(name, options) {
         onComplete: function(event) {
           var bench = event.target;
           rootElement.remove();
+          dump(bench.stats);
+          dump(bench.stats.sample.length);
           dump('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
               bench.stats.rme.toFixed(2) + '%)');
         }
       });
     }
 
+    var jout = {};
     // add suite listeners
     suite.on('start', function() {
       dump('------- ' + name + ' -------------');
     }).on('complete', function() {
           dump('------- ' + name + ' -------------');
           //dump('Fastest is ' + this.filter('fastest').pluck('name'));
+          jout[name] = [];
           this.forEach(function(bench) {
+            jout[name].push(bench);
             dump(pad(bench.name, 9) + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
                 bench.stats.rme.toFixed(2) + '%)');
           });
@@ -71,6 +76,9 @@ function benchmark(name, options) {
         .run();
 
     waitsFor(function() {
+      if (!suite.running) {
+        dump('XXX: ' + JSON.stringify(jout));
+      }
       return !suite.running;
     }, '', Number.MAX_VALUE);
   });

@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
   var q = require('q'),
-      path = require('path');
+      path = require('path'),
+      exec = require('child_process').exec;
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
     var done = this.async();
@@ -112,4 +113,17 @@ module.exports = function (grunt) {
       }
     }
   });
+
+  grunt.registerTask('benchmark', 'Run the benchmarks and generate a report',
+    function() {
+      var done = this.async();
+
+      process.nextTick(function () {
+        exec('echo "var results =" >report/sampleTimes.js &&' +
+            ' /usr/local/google/gits/nvm/v0.8.11/bin/node node_modules/karma/bin/karma run |' +
+            ' grep XXX: | sed -e "s/^.*XXX:[^{]*{\\(.*\\)}\'.*$/{\\1}/" >> report/sampleTimes.js', function() {
+          done();
+        });
+      });
+    });
 }

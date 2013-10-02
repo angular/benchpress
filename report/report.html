@@ -1,0 +1,97 @@
+<html>
+<head>
+	<script type="text/javascript" src="angular.min.js"></script>
+	<script src="sampleTimes.js"></script>
+
+	<script src="reportCtrl.js"></script>
+	<!--<link rel="stylesheet" href="reset/_/css/reset.css">-->
+	<style>
+	body {
+		margin: 3em;
+	}
+
+	.timeline {
+		position: relative;
+	}
+
+	.segment {
+		float: left;
+		position: absolute;
+	}
+
+	.segment-inner {
+		position: relative;
+	}
+
+	.seg-ball {
+		position: absolute;
+		background-color: black;
+		height: 3px;
+		width: 1px;
+	}
+
+	.mean {
+		position: absolute;
+		background-color: red;
+		height: 1px;
+	}
+
+	.mean-label {
+		position: absolute;
+		color: red;
+		margin-left: 505px;
+	}
+
+	.seg-ball-end {
+		margin-left: -2px;
+	}
+
+	.seg-line {
+		position: absolute;
+		background-color: black;
+		height: 1px;
+		margin-top: 1px;
+	}
+
+	.reset, .segment::after, .timeline::after {
+		content: "";
+        display: block; 
+        clear: both;
+	}
+
+	.benchmark-run {
+		margin: 2em 0;
+	}
+	</style>
+
+</head>
+<body ng-app ng-controller="Report">
+  <div class="benchmark-run">{{ suiteName }} Benchmarks</div>
+
+    <div ng-repeat="b in bs" class="benchmark-run">
+		{{b.b.name}} benchmark. {{b.samples.length}} cycles.
+
+		<div ng-style="{'margin-left':b.maxSeg.x}">
+			max {{b.maxSeg.sample|number:0}} ops/sec. {{b.maxSeg.ops}} ops. {{ b.maxSeg.time|number:2 }} ms.
+		</div>
+		
+
+		<div class="timeline" ng-style="{width: 500, height: b.maxOps-b.minOps+2}">
+
+			<div class="mean" ng-style="{top:b.maxOps-b.avg, width:500}"></div>
+			<div class="mean-label" ng-style="{top:b.maxOps-b.avg-10, width:500}" >mean {{b.avgValue | number:0}} ops/sec</div>
+			<div ng-repeat="s in b.segs" class="segment" ng-style="{top:s.y, 'margin-left':s.x}">
+				<div class="segment-inner">
+					<div class="seg-ball"></div>
+					<div class="seg-line" ng-style="{width:s.w}"></div>
+					<div class="seg-ball" ng-style="{'margin-left': s.w-1}"></div>	
+				</div>
+			</div>
+		</div>
+
+		<div ng-style="{'margin-left':b.minSeg.x}">
+			min {{b.minSeg.sample|number:0}} ops/sec {{b.minSeg.ops}} ops. {{ b.minSeg.time|number:2 }} ms.
+		</div>
+	</div>
+</body>
+</html>

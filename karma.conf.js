@@ -8,6 +8,7 @@ module.exports = function(config) {
     // all tests must be 'included', but all other libraries must be 'served' and
     // optionally 'watched' only.
     files: [
+      'lodash.js',
       'benchmark.js',
       'src/ng-bench.js',
       //'../build/angular.js',
