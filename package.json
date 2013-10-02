@@ -21,6 +21,9 @@
   "gitHead": "b2a2e1635b22dedf15dff671aa4cb4154f0fcb44",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "q": "~0.9.7"
+    "q": "~0.9.7",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma": "~0.10.2",
+    "karma-jasmine": "~0.1.3"
   }
 }
