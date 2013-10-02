@@ -1,6 +1,5 @@
 module.exports = function(config) {
   config.set({
-    //logLevel: config.LOG_DEBUG,
     basePath: '.',
     frameworks: ['jasmine'],
 
@@ -11,15 +10,10 @@ module.exports = function(config) {
       'lodash.js',
       'benchmark.js',
       'src/ng-bench.js',
-      //'../build/angular.js',
-      //'capture/capture-latest.js',
-      'builds/angular-1.0.0rc8.js',
-      'capture/capture-1.0.0rc8.js',
-      //'builds/angular-1.0.0rc1.js',
-      //'capture/capture-1.0.0rc1.js',
-    
-      'specs/*.js', // test ngBench before any tests are run!
-    
+      configA.angular,
+      configA.capture,
+      configB.angular,
+      configB.capture
       'perfs/ng/*.js'
     ],
 

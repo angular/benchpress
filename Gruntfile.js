@@ -22,7 +22,7 @@ module.exports = function (grunt) {
       .then(packageBuild)
       .then(copyBuild)
       .then(generateKarma)
-      //        .then(repeat);
+      .then(repeat);
     }
 
     function checkForClone (sha) {
@@ -33,8 +33,8 @@ module.exports = function (grunt) {
         if (!grunt.file.isDir(GIT_FOLDER)) {
           grunt.log.writeln('Creating clone of angular.js repo');
           grunt.util.spawn({
-cmd: 'git',
-              args: ['clone', 'https://github.com/angular/angular.js']
+            cmd: 'git',
+            args: ['clone', 'https://github.com/angular/angular.js']
           },
           function () {
             deferred.resolve(sha);
@@ -133,11 +133,34 @@ cmd: 'git',
     }
 
     function generateKarma (sha) {
-      done();
+      var deferred = q.defer();
+      var configFile = sha === sha1 ? 'configA.json' : 'configB.json';
+
+      process.nextTick(function () {
+        var version = grunt.file.readJSON(path.resolve(GIT_FOLDER, 'build', 'version.json'));
+        grunt.log.writeln('version', version);
+
+        grunt.file.write(path.resolve('builds', 'sha-' + sha, 'angular-capture.js'),
+          [
+            'var angulars = angulars || {};',
+            'angulars["' + version.full + '"] = angular;',
+            'angular = null'
+          ].join('\n'));
+
+        var config = {
+          angular: path.resolve('builds', 'sha-' + sha, 'angular.min.js'),
+          capture: path.resolve('builds', 'sha-' + sha, 'angular-capture.js')
+        };
+
+        grunt.file.write(path.resolve(configFile), JSON.stringify(config));
+        deferred.resolve(sha);
+      });
+
+      return deferred.promise;
     }
 
     function repeat (sha) {
-      if (sha === sha1) {
+      if (sha === sha1 && sha2) {
         stepThrough(sha2);
        }
       else {
@@ -152,7 +175,7 @@ cmd: 'git',
 
       process.nextTick(function () {
         exec('echo "var results =" >report/sampleTimes.js &&' +
-            ' /usr/local/google/gits/nvm/v0.8.11/bin/node node_modules/karma/bin/karma run |' +
+            ' node node_modules/karma/bin/karma run |' +
             ' grep XXX: | sed -e "s/^.*XXX:[^{]*{\\(.*\\)}\'.*$/{\\1}/" >> report/sampleTimes.js', function() {
           done();
         });

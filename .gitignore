@@ -1,3 +1,5 @@
 node_modules/
 angular.js/
 builds/
+configA.json
+configB.json
