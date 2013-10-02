@@ -1,11 +1,13 @@
 module.exports = function (grunt) {
   var q = require('q'),
       path = require('path'),
-      exec = require('child_process').exec;
+      exec = require('child_process').exec,
+      createClone = require('./tasks/createClone')(grunt);
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
-    var GIT_FOLDER = 'angular.js';
+    var GIT_DIR = 'angular.js';
     var BUILD_DIR = 'builds';
+    var DEFAULT_REPO = 'https://github.com/angular/angular.js';
     var done = this.async();
 
     if (grunt.file.isDir(BUILD_DIR)) {
@@ -13,40 +15,15 @@ module.exports = function (grunt) {
     }
 
     grunt.file.mkdir(BUILD_DIR);
-
     stepThrough(sha1);
 
     function stepThrough (sha) {
-      checkForClone(sha)
+      createClone(DEFAULT_REPO, sha)
       .then(checkoutSHA)
       .then(packageBuild)
       .then(copyBuild)
       .then(generateKarma)
       .then(repeat);
-    }
-
-    function checkForClone (sha) {
-      var deferred = q.defer();
-      grunt.log.writeln('Step 1: Check to see if a private copy of the repo exists');
-
-      process.nextTick(function () {
-        if (!grunt.file.isDir(GIT_FOLDER)) {
-          grunt.log.writeln('Creating clone of angular.js repo');
-          grunt.util.spawn({
-            cmd: 'git',
-            args: ['clone', 'https://github.com/angular/angular.js']
-          },
-          function () {
-            deferred.resolve(sha);
-          });
-        }
-        else {
-          grunt.log.writeln('angular.js repo already exists. (this is a good thing)');
-          deferred.resolve(sha);
-        }
-      });
-
-      return deferred.promise;
     }
 
     //Step 3: Package the build
@@ -59,7 +36,7 @@ module.exports = function (grunt) {
     function checkoutSHA (sha) {
       var deferred = q.defer(),
           remote = 'origin',
-          repoPath = path.resolve(GIT_FOLDER);
+          repoPath = path.resolve(GIT_DIR);
 
       grunt.log.writeln('Step 2: Preparing to checkout sha', sha, 'to build a copy');
 
@@ -100,14 +77,14 @@ module.exports = function (grunt) {
         grunt.util.spawn({
           cmd: 'npm',
           args: ['install'],
-          opts: {cwd: path.resolve(GIT_FOLDER)}
+          opts: {cwd: path.resolve(GIT_DIR)}
         }, 
         function () {
           grunt.log.writeln('Running grunt package...');
           grunt.util.spawn({
             cmd: 'grunt',
             args: ['package'],
-            opts: {cwd: path.resolve(GIT_FOLDER)}
+            opts: {cwd: path.resolve(GIT_DIR)}
           },
           function () {
             deferred.resolve(sha);
@@ -124,8 +101,8 @@ module.exports = function (grunt) {
 
       process.nextTick(function () {
         grunt.file.mkdir(BUILD_DIR + '/sha-' + sha);
-        grunt.file.copy(path.resolve(GIT_FOLDER, 'build', 'angular.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.js'));
-        grunt.file.copy(path.resolve(GIT_FOLDER, 'build', 'angular.min.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.min.js'));
+        grunt.file.copy(path.resolve(GIT_DIR, 'build', 'angular.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.js'));
+        grunt.file.copy(path.resolve(GIT_DIR, 'build', 'angular.min.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.min.js'));
         deferred.resolve(sha);
       });
       
@@ -137,8 +114,7 @@ module.exports = function (grunt) {
       var configFile = sha === sha1 ? 'configA.json' : 'configB.json';
 
       process.nextTick(function () {
-        var version = grunt.file.readJSON(path.resolve(GIT_FOLDER, 'build', 'version.json'));
-        grunt.log.writeln('version', version);
+        var version = grunt.file.readJSON(path.resolve(GIT_DIR, 'build', 'version.json'));
 
         grunt.file.write(path.resolve('builds', 'sha-' + sha, 'angular-capture.js'),
           [
