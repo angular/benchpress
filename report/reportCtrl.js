@@ -49,7 +49,6 @@ function Report($scope) {
   for (var k in results) {
     $scope.suiteName = k;
     calcSuite(results[k]);
-    break;
   }
 
 	$scope.runTests = function() {

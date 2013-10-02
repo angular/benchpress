@@ -1,7 +1,7 @@
 function benchmark(name, options) {
 
   it(name, function() {
-    dump(name, options.bench)
+    console.log(name, options.bench)
     var actualTest = options.bench;
     var actualSetup = options.setup;
     var assert = options.assert;
@@ -13,6 +13,7 @@ function benchmark(name, options) {
     var suite = new Benchmark.Suite;
 
     for (var version in angulars) {
+      debugger;
       var angular = angulars[version],
           injector, test, rootElement;
 
@@ -36,25 +37,25 @@ function benchmark(name, options) {
 
       suite.add({
         name: version,
-        defer: true,
+        defer: false,
         delay: 0,
         fn: function(deferred) {
           test();
-          setTimeout(function() {
-            deferred.resolve(); //TODO(i): we don't measure the rendering phase
-
-          }, 0);
+//          setTimeout(function() {
+//            deferred.resolve(); //TODO(i): we don't measure the rendering phase
+//
+//          }, 0);
         },
         onStart: function(event) {
           var bench = event.target;
-          dump('start[' + bench.name + ']: ');
+          console.log('start[' + bench.name + ']: ');
         },
         onComplete: function(event) {
           var bench = event.target;
           rootElement.remove();
-          dump(bench.stats);
-          dump(bench.stats.sample.length);
-          dump('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+          console.log(bench.stats);
+          console.log(bench.stats.sample.length);
+          console.log('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
               bench.stats.rme.toFixed(2) + '%)');
         }
       });
@@ -63,17 +64,15 @@ function benchmark(name, options) {
     var jout = {};
     // add suite listeners
     suite.on('start', function() {
-      dump('------- ' + name + ' -------------');
+      console.log('------- ' + name + ' -------------');
     }).on('complete', function() {
-          dump('------- ' + name + ' -------------');
-          //dump('Fastest is ' + this.filter('fastest').pluck('name'));
+          console.log('------- ' + name + ' -------------');
+          //console.log('Fastest is ' + this.filter('fastest').pluck('name'));
           jout[name] = [];
           this.forEach(function(bench) {
             jout[name].push(bench);
-            dump(pad(bench.name, 9) + ': ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
-                bench.stats.rme.toFixed(2) + '%)');
           });
-          dump('----------------------------------');
+          console.log('----------------------------------');
         })
 
       // run async
@@ -81,7 +80,7 @@ function benchmark(name, options) {
 
     waitsFor(function() {
       if (!suite.running) {
-        dump('XXX: ' + JSON.stringify(jout));
+        console.log('XXX: ' + JSON.stringify(jout));
       }
       return !suite.running;
     }, '', Number.MAX_VALUE);

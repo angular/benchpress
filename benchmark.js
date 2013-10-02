@@ -1660,7 +1660,8 @@
         if (!clone.error) {
           console.log('running with count:',bench.count);
           compiled = bench.compiled = clone.compiled = createCompiled(bench, deferred, funcBody);
-          result = compiled.call(deferred || bench, context, timer).elapsed;
+          var compiledRun = compiled.call(deferred || bench, context, timer);
+          result = compiledRun.elapsed;
         }
         return result;
       };
@@ -2054,13 +2055,15 @@
       if (clone.running) {
         // `minTime` is set to `Benchmark.options.minTime` in `clock()`
         cycles = ++clone.cycles;
+        var ourStart = window.performance.now();
         clocked = deferred ? deferred.elapsed : clock(clone);
+        var ourStop = window.performance.now();
         if (deferred) {
           clone.sampleStart = deferred.timeStamp;
           clone.sampleStop = deferred.endTimeStamp;
         } else {
-          clone.sampleStart = clone.timeStamp;
-          clone.sampleEnd = clone.endTimeStamp;
+          clone.sampleStart = ourStart;
+          clone.sampleStop = ourStop;
         }
         minTime = clone.minTime;
 
