@@ -5,7 +5,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
     var GIT_FOLDER = 'angular.js';
+    var BUILD_DIR = 'builds';
     var done = this.async();
+
+    if (grunt.file.isDir(BUILD_DIR)) {
+      grunt.file.delete(BUILD_DIR);
+    }
+
+    grunt.file.mkdir(BUILD_DIR);
 
     stepThrough(sha1);
 
@@ -14,7 +21,7 @@ module.exports = function (grunt) {
       .then(checkoutSHA)
       .then(packageBuild)
       .then(copyBuild)
-      //        .then(generateKarma)
+      .then(generateKarma)
       //        .then(repeat);
     }
 
@@ -112,11 +119,21 @@ cmd: 'git',
     }
 
     function copyBuild (sha) {
+      var deferred = q.defer();
       grunt.log.writeln('Step 4: Copy the build to a new directory.');
-      done();
+
+      process.nextTick(function () {
+        grunt.file.mkdir(BUILD_DIR + '/sha-' + sha);
+        grunt.file.copy(path.resolve(GIT_FOLDER, 'build', 'angular.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.js'));
+        grunt.file.copy(path.resolve(GIT_FOLDER, 'build', 'angular.min.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.min.js'));
+        deferred.resolve(sha);
+      });
+      
+      return deferred.promise;
     }
 
     function generateKarma (sha) {
+      done();
     }
 
     function repeat (sha) {
