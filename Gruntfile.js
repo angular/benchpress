@@ -50,18 +50,9 @@ cmd: 'git',
     //Should this help set up remotes?
 
     function checkoutSHA (sha) {
-      var remote, fullSHA,
-          deferred = q.defer(),
+      var deferred = q.defer(),
+          remote = 'origin',
           repoPath = path.resolve(GIT_FOLDER);
-
-      if (sha.indexOf('/') !== -1) {
-        remote = sha.split('/')[0];
-        fullSHA = sha.split('/')[1];
-      }
-      else {
-        fullSHA = sha;
-        remote = 'origin';
-      }
 
       grunt.log.writeln('Step 2: Preparing to checkout sha', sha, 'to build a copy');
 
@@ -73,10 +64,10 @@ cmd: 'git',
             opts: {cwd: repoPath}
           },
           function () {
-            grunt.log.writeln('Checking out SHA', fullSHA);
+            grunt.log.writeln('Checking out SHA', sha);
             grunt.util.spawn({
               cmd: 'git',
-              args: ['checkout', fullSHA],
+              args: ['checkout', sha],
               opts: {cwd: repoPath}
             },
             function (err, result, code) {
