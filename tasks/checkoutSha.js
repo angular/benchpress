@@ -12,7 +12,8 @@ module.exports = function (grunt) {
         path = require('path'),
         deferred  = q.defer(),
         remote = 'origin',
-        repoPath  = path.resolve(GIT_DIR);
+        repoPath  = path.resolve(GIT_DIR),
+        done = !sha ? this.async() : null;
 
     process.nextTick(function () {
       grunt.log.writeln('Fetching remote...');
@@ -34,6 +35,7 @@ module.exports = function (grunt) {
             grunt.log.writeln('Done checkout: ', err, result, code);
 
             deferred.resolve(repo, sha);
+            done && done();
           });
         });
     });

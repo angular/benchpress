@@ -3,7 +3,8 @@ module.exports = function (grunt) {
       path = require('path'),
       exec = require('child_process').exec,
       createClone = require('./tasks/createClone')(grunt),
-      checkoutSHA = require('./tasks/checkoutSha')(grunt);
+      checkoutSHA = require('./tasks/checkoutSha')(grunt),
+      packageBuild = require('./tasks/packageBuild')(grunt);
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
     console.log('args', process.argv);
@@ -35,36 +36,7 @@ module.exports = function (grunt) {
     //Should this run the tests?
     //Should this help set up remotes?
 
-    function packageBuild (sha) {
-      var deferred = q.defer();
-
-      grunt.log.writeln('Step 3: Package build');
-
-      process.nextTick(function () {
-        //Important if it's a fresh clone. 
-        //Otherwise the package process would
-        //Automatically npm install
-        grunt.log.writeln('Installing npm dependencies...');
-        grunt.util.spawn({
-          cmd: 'npm',
-          args: ['install'],
-          opts: {cwd: path.resolve(GIT_DIR)}
-        }, 
-        function () {
-          grunt.log.writeln('Running grunt package...');
-          grunt.util.spawn({
-            cmd: 'grunt',
-            args: ['package'],
-            opts: {cwd: path.resolve(GIT_DIR)}
-          },
-          function () {
-            deferred.resolve(sha);
-          });
-        });
-      });
-
-      return deferred.promise;
-    }
+    
 
     function copyBuild (sha) {
       var deferred = q.defer();
