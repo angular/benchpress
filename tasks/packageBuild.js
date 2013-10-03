@@ -6,12 +6,22 @@ module.exports = function (grunt) {
 
 	return packageBuild;
 
-  function packageBuild (repo, sha) {
-    var q = require('q'),
+  function packageBuild (options, arg2) {
+    var repo, sha,
+        q = require('q'),
         deferred = q.defer(),
         GIT_DIR = 'angular.js',
-        done = !sha ? this.async() : null,
+        done = this.async ? this.async() : null,
         path = require('path');
+
+    if (typeof options === 'string') {
+      repo = options;
+      sha = arg2;
+    }
+    else {
+      repo = options.repo;
+      sha = options.sha;
+    }
 
     process.nextTick(function () {
       //Important if it's a fresh clone. 
@@ -28,7 +38,7 @@ module.exports = function (grunt) {
       }, 
       function () {
         grunt.log.writeln('Running grunt package...');
-        
+
         grunt.util.spawn({
           cmd: 'grunt',
           args: ['package'],
@@ -37,7 +47,7 @@ module.exports = function (grunt) {
           }
         },
         function () {
-          deferred.resolve(repo, sha);
+          deferred.resolve(options);
           done && done();
         });
       });

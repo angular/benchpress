@@ -6,14 +6,24 @@ module.exports = function (grunt) {
 
   return checkoutSHA;
 
-  function checkoutSHA (repo, sha) {
-    var GIT_DIR   = 'angular.js',
+  function checkoutSHA (options, arg2) {
+    var repo, sha,
+        GIT_DIR   = 'angular.js',
         q = require('q'),
         path = require('path'),
         deferred  = q.defer(),
         remote = 'origin',
         repoPath  = path.resolve(GIT_DIR),
-        done = !sha ? this.async() : null;
+        done = this.async ? this.async() : null;
+
+    if (typeof options === 'string') {
+      repo = options;
+      sha = arg2;
+    }
+    else {
+      repo = options.repo;
+      sha = options.sha;
+    }
 
     process.nextTick(function () {
       grunt.log.writeln('Fetching remote...');
@@ -34,7 +44,7 @@ module.exports = function (grunt) {
           function (err, result, code) {
             grunt.log.writeln('Done checkout: ', err, result, code);
 
-            deferred.resolve(repo, sha);
+            deferred.resolve(options);
             done && done();
           });
         });

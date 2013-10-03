@@ -4,10 +4,11 @@ module.exports = function (grunt) {
       exec = require('child_process').exec,
       createClone = require('./tasks/createClone')(grunt),
       checkoutSHA = require('./tasks/checkoutSha')(grunt),
-      packageBuild = require('./tasks/packageBuild')(grunt);
+      packageBuild = require('./tasks/packageBuild')(grunt),
+      copyBuild = require('./tasks/copyBuild')(grunt),
+      generateKarma = require('./tasks/generateKarma')(grunt);
 
   grunt.registerTask('compareShas', 'Run tests against two SHAs', function (sha1, sha2) {
-    console.log('args', process.argv);
     var GIT_DIR = 'angular.js';
     var BUILD_DIR = 'builds';
     var DEFAULT_REPO = 'https://github.com/angular/angular.js';
@@ -21,65 +22,26 @@ module.exports = function (grunt) {
     stepThrough(sha1);
 
     function stepThrough (sha) {
-      createClone(DEFAULT_REPO, sha)
-      .then(checkoutSHA)
-      .then(packageBuild)
-      .then(copyBuild)
-      .then(generateKarma)
-      .then(repeat);
+      createClone({repo: DEFAULT_REPO, sha: sha})
+        .then(checkoutSHA)
+        .then(packageBuild)
+        .then(copyBuild)
+        .then(function (options) {
+          var deferred = q.defer();
+
+          process.nextTick(function () {
+            options.configFile = options.sha === sha1 ? 'configA.json' : 'configB.json';
+            deferred.resolve(options);
+          });
+
+          return deferred.promise;
+        })
+        .then(generateKarma)
+        .then(repeat);
     }
 
-    //Step 3: Package the build
-    //Step 4: Copy the build into a temporary directory
-    //Step 5: Generate a karma config for testing this sha
-    //Repeat process for 2nd sha
-    //Should this run the tests?
-    //Should this help set up remotes?
-
-    
-
-    function copyBuild (sha) {
-      var deferred = q.defer();
-      grunt.log.writeln('Step 4: Copy the build to a new directory.');
-
-      process.nextTick(function () {
-        grunt.file.mkdir(BUILD_DIR + '/sha-' + sha);
-        grunt.file.copy(path.resolve(GIT_DIR, 'build', 'angular.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.js'));
-        grunt.file.copy(path.resolve(GIT_DIR, 'build', 'angular.min.js'), path.resolve(BUILD_DIR, 'sha-' + sha, 'angular.min.js'));
-        deferred.resolve(sha);
-      });
-      
-      return deferred.promise;
-    }
-
-    function generateKarma (sha) {
-      var deferred = q.defer();
-      var configFile = sha === sha1 ? 'configA.json' : 'configB.json';
-
-      process.nextTick(function () {
-        var version = grunt.file.readJSON(path.resolve(GIT_DIR, 'build', 'version.json'));
-
-        grunt.file.write(path.resolve('builds', 'sha-' + sha, 'angular-capture.js'),
-          [
-            'var angulars = angulars || {};',
-            'angulars["' + version.full + '"] = angular;',
-            'angular = null'
-          ].join('\n'));
-
-        var config = {
-          angular: path.resolve('builds', 'sha-' + sha, 'angular.min.js'),
-          capture: path.resolve('builds', 'sha-' + sha, 'angular-capture.js')
-        };
-
-        grunt.file.write(path.resolve(configFile), JSON.stringify(config));
-        deferred.resolve(sha);
-      });
-
-      return deferred.promise;
-    }
-
-    function repeat (sha) {
-      if (sha === sha1 && sha2) {
+    function repeat (options) {
+      if (options.sha === sha1 && sha2) {
         stepThrough(sha2);
        }
       else {

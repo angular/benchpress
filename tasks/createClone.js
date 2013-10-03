@@ -5,13 +5,23 @@ module.exports = function (grunt) {
 
   return createClone;
 
-  function createClone (repo, sha) {
-    var q = require('q'),
+  function createClone (options, arg2) {
+    var repo, sha,
+        q = require('q'),
         GIT_FOLDER = 'angular.js',
         // If this is a one-off task, we'll use done
-        done = !sha ? this.async() : null,
+        done = this.async ? this.async() : null,
         // Otherwise we'll resolve the promise
         deferred = q.defer();
+
+    if (typeof options === 'string') {
+      repo = options;
+      sha = arg2;
+    }
+    else {
+      repo = options.repo;
+      sha = options.sha;
+    }
 
     process.nextTick(function () {
       if (!grunt.file.isDir(GIT_FOLDER)) {
@@ -22,14 +32,14 @@ module.exports = function (grunt) {
           args: ['clone', repo]
         },
         function () {
-          deferred.resolve(repo, sha);
+          deferred.resolve(options);
           done && done();
         });
       }
       else {
         grunt.log.writeln('angular.js repo already exists. (this is a good thing)');
 
-        deferred.resolve(repo, sha);
+        deferred.resolve(options);
         done && done();
       }
     });
