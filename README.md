@@ -28,6 +28,7 @@ must be completed:
  * Customization of build process (instead of assuming `grunt package`)
  * Allow remote & repo configuration
  * Change the name of the project something other than "ngBench"
+
 ### Global Runner
 
 The framework should provide the ability to run
