@@ -2,7 +2,7 @@ module.exports = function (grunt) {
   grunt.registerTask(
     'generateKarma',
     'generate the configuration for karma',
-    generateKarma)
+    generateKarma);
 
   return generateKarma;
 
@@ -19,6 +19,10 @@ module.exports = function (grunt) {
       sha = arg2;
     }
     else {
+      if (!options) {
+        grunt.log.error('generateKarma called with no options');
+        return false;
+      }
       repo = options.repo;
       sha = options.sha;
     }

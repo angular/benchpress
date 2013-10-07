@@ -13,7 +13,7 @@ module.exports = function(config) {
       configA.angular,
       configA.capture,
       configB.angular,
-      configB.capture
+      configB.capture,
       'perfs/ng/*.js'
     ],
 
