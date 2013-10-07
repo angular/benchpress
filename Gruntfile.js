@@ -55,9 +55,30 @@ module.exports = function (grunt) {
       var done = this.async();
 
       process.nextTick(function () {
-        exec('echo "var results =" >report/sampleTimes.js &&' +
-            ' node node_modules/karma/bin/karma run |' +
-            ' grep XXX: | sed -e "s/^.*XXX:[^{]*{\\(.*\\)}\'.*$/{\\1}/" >> report/sampleTimes.js', function() {
+        exec(' node node_modules/karma/bin/karma start --single-run |' +
+             ' grep XXX: | sed -e "s/^.*XXX:[^{]*{\\(.*\\)}\'.*$/{\\1}/" > report/sampleTimes.json &&' +
+             ' echo "var results =" > report/sampleTimes.js &&' +
+             ' cat report/sampleTimes.json >> report/sampleTimes.js', function() {
+          var sampleTimes = require('./report/sampleTimes.json');
+
+          grunt.log.writeln('Results:');
+          for (var s in sampleTimes) {
+            grunt.log.writeln('  ' + s);
+            var r = sampleTimes[s];
+            var lines = [];
+            var maxNameLen = 0;
+            for (var b in r) {
+              var bench = r[b];
+              lines.push({name: bench.name, mean: Math.floor(1 / (bench.stats.mean + bench.stats.moe))});
+              var nl = bench.name.length;
+              if (nl > maxNameLen) maxNameLen = nl;
+            }
+            for (var l in lines) {
+              var name = lines[l].name;
+              grunt.log.writeln('    ' + name + ': ' + new Array(maxNameLen + 1 - name.length).join(' ') + lines[l].mean + ' ops/sec');
+            }
+            grunt.log.writeln('  Report: file://' + process.cwd() + '/report/report.html');
+          }
           done();
         });
       });

@@ -39,8 +39,6 @@ Comparing Two SHAs of the repository
 ```
 //Creates builds of each SHA and configures Karma to test them.
 grunt compareShas:sha1:sha2
-//Start karma (make sure to leave the karma browser tab open)
-karma start --single-run
 //Run the tests
 grunt benchmark
 ```
