@@ -1,7 +1,25 @@
-ngBench
-=======
+# ngBench
 
 A benchmarking harness built on karma and jasmine.
+
+
+## Overview
+
+This project is meant to compare the performance of
+other projects over time, by running a set of
+performance tests against different versions of
+a project.
+
+Presently, ng-bench supports comparison of two
+SHAs of the Angular.js project.
+
+## Roadmap
+
+ * Test projects other than angular.js
+ * Ability to run the benchmark runner from within
+    an existing project, similar to how karma works
+ * Record and share past runs for historical comparison
+ * A UI to set up, run, and view reports
 
 First-time setup
 -------
