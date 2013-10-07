@@ -13,7 +13,6 @@ function benchmark(name, options) {
     var suite = new Benchmark.Suite;
 
     for (var version in angulars) {
-      debugger;
       var angular = angulars[version],
           injector, test, rootElement;
 
