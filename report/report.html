@@ -55,8 +55,8 @@
 
 	.reset, .segment::after, .timeline::after {
 		content: "";
-        display: block; 
-        clear: both;
+                display: block;
+                clear: both;
 	}
 
 	.benchmark-run {
@@ -66,7 +66,7 @@
 
 </head>
 <body ng-app ng-controller="Report">
-  <div class="benchmark-run">{{ suiteName }} Benchmarks</div>
+  <div class="benchmark-run">{{ suiteName }} benchmarks</div>
 
     <div ng-repeat="b in bs" class="benchmark-run">
 		{{b.b.name}} benchmark. {{b.samples.length}} cycles.
