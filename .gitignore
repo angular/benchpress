@@ -3,3 +3,6 @@ angular.js/
 builds/
 configA.json
 configB.json
+report/sampleTimes.json
+report/sampleTimes.js
+.idea/
