@@ -1,4 +1,7 @@
 module.exports = function(config) {
+  var configA = require('./configA.json'),
+      configB = require('./configB.json');
+
   config.set({
     basePath: '.',
     frameworks: ['jasmine'],
