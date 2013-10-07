@@ -26,8 +26,7 @@ First-time setup
 
 In the base directory, run:
 ```
-npm install -g grunt-cli
-npm install -g karma
+npm install -g grunt-cli karm
 npm install .
 ```
 
