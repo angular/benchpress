@@ -66,6 +66,26 @@
 
 </head>
 <body ng-app ng-controller="Report">
+  <div style="font-size: x-small">
+    <p><b>How to read:</b> This report is a sequence of Benchmark.js runs.
+    For each benchmark, the name of the benchmark is listed then a Benchmark.js
+    run for each version of AngularJS is shown.</p>
+
+    <p>A Benchmark.js run consists of cycles.  Each cycle runs the benchmarked
+    function a pre-determined number of times in a tight loop.  The number of cycles in the run is listed after
+    run's name.</p>
+
+    <p>The run's chart plots time on the x-axis.  The scale is constant across
+    all runs in the report.  The y-axis plots operations per second for each
+    cycle.</p>
+
+    <p>The cycles with the max and min ops/sec are identified along with
+    all the stats for that cycle.</p>
+
+    <p>The mean ops/sec over all the cycles is identified by a run line.</p>
+  </div>
+
+
   <div class="benchmark-run">{{ suiteName }} benchmarks</div>
 
     <div ng-repeat="b in bs" class="benchmark-run">

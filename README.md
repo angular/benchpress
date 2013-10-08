@@ -13,6 +13,57 @@ a project.
 Presently, ng-bench supports comparison of two
 SHAs of the Angular.js project.
 
+First-time setup
+-------
+
+In the base directory, run:
+```
+npm install -g grunt-cli karma
+npm install .
+```
+
+Comparing Two SHAs of the repository
+--------
+
+(Currently it assumes the repo is angularjs)
+
+```
+//Creates builds of each SHA and configures Karma to test them.
+grunt compareShas:sha1:sha2
+//Run the tests
+grunt benchmark
+```
+
+Once `grunt benchmark` is complete, the test output is available
+in report/report.html.
+
+## Writing Benchmarks
+
+Benchmarks should be added to the perf/ directory in this repository.
+
+Benchmarks are written in Jasmine-style:
+
+```
+describe('some feature', function() {
+  benchmark('some behaviour',
+     setup: function(bench, ...) {
+       ...
+       return bench(...);
+     },
+     bench: function(...) { ... },
+     assert: function(setup, bench, ...) {
+       var test = $injector.invoke(setup, ...);
+
+       test();  // Run the test
+       expect(...).toBe(...);
+     });
+});
+```
+
+The setup function returns a function which is benchmarked using Benchmark.js.
+The assert function is run to verify that the benchmark is measuring
+what you expect it to be measuring.
+
 ## Tentative Roadmap
 
 ### Test projects other than angular.js
@@ -83,27 +134,4 @@ as in reporting views of tests.
 Longer-term, there should be an API to write custom
 visualizations of data to be included in reports.
 
-First-time setup
--------
-
-In the base directory, run:
-```
-npm install -g grunt-cli karm
-npm install .
-```
-
-Comparing Two SHAs of the repository
---------
-
-(Currently it assumes the repo is angularjs)
-
-```
-//Creates builds of each SHA and configures Karma to test them.
-grunt compareShas:sha1:sha2
-//Run the tests
-grunt benchmark
-```
-
-Once `grunt benchmark` is complete, the test output is available
-in report/report.html.
 

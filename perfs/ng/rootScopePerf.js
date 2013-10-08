@@ -82,9 +82,7 @@ describe('$rootScope', function() {
         num = 20;
         test();
         expect($rootScope.sum).toEqual(2000);
-
       }
-
     });
 
     /*
