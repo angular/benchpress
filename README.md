@@ -79,6 +79,7 @@ must be completed:
  * Customization of build process (instead of assuming `grunt package`)
  * Allow remote & repo configuration
  * Change the name of the project something other than "ngBench"
+
 ### Global Runner
 
 The framework should provide the ability to run
@@ -134,4 +135,27 @@ as in reporting views of tests.
 Longer-term, there should be an API to write custom
 visualizations of data to be included in reports.
 
+First-time setup
+-------
+
+In the base directory, run:
+```
+npm install -g grunt-cli karm
+npm install .
+```
+
+Comparing Two SHAs of the repository
+--------
+
+(Currently it assumes the repo is angularjs)
+
+```
+//Creates builds of each SHA and configures Karma to test them.
+grunt compareShas:sha1:sha2
+//Run the tests
+grunt benchmark
+```
+
+Once `grunt benchmark` is complete, the test output is available
+in report/report.html.
 
