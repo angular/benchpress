@@ -1,18 +1,20 @@
 function benchmark(name, options) {
 
   it(name, function() {
-    console.log(name, options.bench)
+    console.log(name, options.bench);
     var actualTest = options.bench;
     var actualSetup = options.setup;
     var assert = options.assert;
 
     var globalSetup = function(angular) {
       return angular.injector(['ng']);
-    }
+    };
 
     var suite = new Benchmark.Suite;
 
-    for (var version in angulars) {
+    for (var unfilteredVersion in angulars) {
+      //noinspection JSUnfilteredForInLoop
+      var version = unfilteredVersion;
       var angular = angulars[version],
           injector, test, rootElement;
 
@@ -34,30 +36,32 @@ function benchmark(name, options) {
       //TODO(i) remove
       window.angular = null;
 
-      suite.add({
-        name: version,
-        defer: false,
-        delay: 0,
-        fn: function(deferred) {
-          test();
-//          setTimeout(function() {
-//            deferred.resolve(); //TODO(i): we don't measure the rendering phase
-//
-//          }, 0);
-        },
-        onStart: function(event) {
-          var bench = event.target;
-          console.log('start[' + bench.name + ']: ');
-        },
-        onComplete: function(event) {
-          var bench = event.target;
-          rootElement.remove();
-          console.log(bench.stats);
-          console.log(bench.stats.sample.length);
-          console.log('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
-              bench.stats.rme.toFixed(2) + '%)');
-        }
-      });
+      (function (test, rootElement) {
+        suite.add({
+          name: version,
+          defer: false,
+          delay: 0,
+          fn: function(deferred) {
+            test();
+  //          setTimeout(function() {
+  //            deferred.resolve(); //TODO(i): we don't measure the rendering phase
+  //
+  //          }, 0);
+          },
+          onStart: function(event) {
+            var bench = event.target;
+            console.log('start[' + bench.name + ']: ');
+          },
+          onComplete: function(event) {
+            var bench = event.target;
+            rootElement.remove();
+            console.log(bench.stats);
+            console.log(bench.stats.sample.length);
+            console.log('done[' + bench.name + ']: ' + Math.round(bench.hz) + ' ops/sec (\u00B1' +
+                bench.stats.rme.toFixed(2) + '%)');
+          }
+        });
+      })(test, rootElement);
     }
 
     var jout = {};
@@ -86,6 +90,6 @@ function benchmark(name, options) {
   });
 
   function pad(string, length) {
-    return string + Array(length - string.length).join(' ');
+    return string + new Array(length - string.length).join(' ');
   }
 }
