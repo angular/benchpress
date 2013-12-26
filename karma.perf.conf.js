@@ -10,11 +10,14 @@ module.exports = function(config) {
     // all tests must be 'included', but all other libraries must be 'served' and
     // optionally 'watched' only.
     files: [
-      'lib/angular.js',
       'lodash.js',
       'benchmark.js',
       'src/ng-bench.js',
-      'specs/*.js'
+      configA.angular,
+      configA.capture,
+      configB.angular,
+      configB.capture,
+      'perfs/ng/*.js'
     ],
 
     autoWatch: false,

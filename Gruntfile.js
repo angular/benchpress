@@ -55,7 +55,7 @@ module.exports = function (grunt) {
       var done = this.async();
 
       process.nextTick(function () {
-        exec(' node node_modules/karma/bin/karma start --single-run |' +
+        exec(' node node_modules/karma/bin/karma start karma.perf.conf.js --single-run |' +
              ' grep XXX: | sed -e "s/^.*XXX:[^{]*{\\(.*\\)}\'.*$/{\\1}/" > report/sampleTimes.json &&' +
              ' echo "var results =" > report/sampleTimes.js &&' +
              ' cat report/sampleTimes.json >> report/sampleTimes.js', function() {

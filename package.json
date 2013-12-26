@@ -4,7 +4,7 @@
   "description": "Benchmark test runner for Angular.",
   "main": "benchmark.js",
   "scripts": {
-    "test": "karma start"
+    "test": "karma start --single-run"
   },
   "repository": {
     "type": "git",
