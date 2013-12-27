@@ -12,6 +12,8 @@ function benchmark(name, options) {
 
     var suite = new Benchmark.Suite;
 
+    var setupPromises = [];
+
     for (var unfilteredVersion in angulars) {
       //noinspection JSUnfilteredForInLoop
       var version = unfilteredVersion;
@@ -21,10 +23,11 @@ function benchmark(name, options) {
       rootElement = angular.element(document.createElement('div'));
       document.body.appendChild(rootElement[0]);
 
-      //TODO(i) remove
-      window.angular = angular;
 
-      injector = globalSetup(angular);
+      injector = options.injector || globalSetup(angular);
+
+      var $q = injector.get('$q');
+
       injector.invoke(assert, null, {setup: actualSetup, bench: actualTest, angular: angular, rootElement: rootElement});
 
       rootElement.remove();
@@ -33,10 +36,15 @@ function benchmark(name, options) {
 
       test = injector.invoke(actualSetup, null, {bench: actualTest, angular: angular, rootElement: rootElement});
 
-      //TODO(i) remove
-      window.angular = null;
+      if (typeof test === "function") {
+        var defer = $q.defer();
+        defer.resolve(test);
+        test = defer.promise;
+      }
 
-      (function (test, rootElement) {
+      var addTest = (function (version, rootElement) {
+        return function(test) {
+          console.log('addTest called');
         suite.add({
           name: version,
           defer: false,
@@ -61,32 +69,48 @@ function benchmark(name, options) {
                 bench.stats.rme.toFixed(2) + '%)');
           }
         });
-      })(test, rootElement);
+      }})(version, rootElement);
+
+      setupPromises.push(test.then(addTest));
     }
 
-    var jout = {};
-    // add suite listeners
-    suite.on('start', function() {
-      console.log('------- ' + name + ' -------------');
-    }).on('complete', function() {
-          console.log('------- ' + name + ' -------------');
-          //console.log('Fastest is ' + this.filter('fastest').pluck('name'));
-          jout[name] = [];
-          this.forEach(function(bench) {
-            jout[name].push(bench);
-          });
-          console.log('----------------------------------');
-        })
+    $q.all(setupPromises).then(function () {
+      var jout = {};
+      // add suite listeners
+      suite.on('start', function() {
+        console.log('------- ' + name + ' -------------');
+      }).on('complete', function() {
+            console.log('------- ' + name + ' -------------');
+            //console.log('Fastest is ' + this.filter('fastest').pluck('name'));
+            jout[name] = [];
+            this.forEach(function(bench) {
+              jout[name].push(bench);
+            });
+            console.log('----------------------------------');
+            //TODO(i) remove
+            window.angular = oldAngular;
 
-      // run async
-        .run();
+          })
 
+        // run async
+          .run();
+
+      waitsFor(function() {
+        console.log('waiting suite running');
+        if (!suite.running) {
+          console.log('XXX: ' + JSON.stringify(jout));
+        }
+        return !suite.running;
+      }, '', Number.MAX_VALUE);
+      allSetup = true;
+      console.log('all setup..');
+    });
+
+    var allSetup = false;
     waitsFor(function() {
-      if (!suite.running) {
-        console.log('XXX: ' + JSON.stringify(jout));
-      }
-      return !suite.running;
-    }, '', Number.MAX_VALUE);
+      console.log('waiting allSetup');
+      return allSetup;
+    });
   });
 
   function pad(string, length) {

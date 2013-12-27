@@ -11,6 +11,7 @@ module.exports = function(config) {
     // optionally 'watched' only.
     files: [
       'lib/angular.js',
+      'lib/angular-mocks.js',
       'lodash.js',
       'benchmark.js',
       'src/ng-bench.js',
