@@ -110,7 +110,7 @@ function benchmark(name, options) {
     waitsFor(function() {
       console.log('waiting allSetup');
       return allSetup;
-    });
+    }, '', Number.MAX_VALUE);
   });
 
   function pad(string, length) {
