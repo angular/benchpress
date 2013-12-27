@@ -87,8 +87,6 @@ function benchmark(name, options) {
               jout[name].push(bench);
             });
             console.log('----------------------------------');
-            //TODO(i) remove
-            window.angular = oldAngular;
 
           })
 
