@@ -1,0 +1,39 @@
+{
+  "name": "benchpress",
+  "version": "0.0.1",
+  "description": "A macro benchmark runner for JavaScript Web apps",
+  "main": "lib/bp.js",
+  "bin": {
+    "benchpress": "build.js"
+  },
+  "scripts": {
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular/benchpress"
+  },
+  "keywords": [
+    "angular",
+    "benchmark",
+    "javascript"
+  ],
+  "author": "jeffbcross, jbdeboer",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/angular/benchpress/issues"
+  },
+  "bin": {
+    "benchpress": "bin/benchpress"
+  },
+  "homepage": "https://github.com/angular/benchpress",
+  "devDependencies": {
+    "http-server": "^0.6.1",
+    "karma": "^0.12.21",
+    "rimraf": "^2.2.8"
+  },
+  "dependencies": {
+    "bootstrap": "^3.2.0",
+    "underscore": "^1.6.0"
+  }
+}
