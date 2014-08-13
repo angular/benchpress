@@ -4,7 +4,7 @@
   "description": "A macro benchmark runner for JavaScript Web apps",
   "main": "lib/bp.js",
   "bin": {
-    "benchpress": "build.js"
+    "benchpress": "bin/benchpress"
   },
   "scripts": {
     "test": "karma start"
@@ -23,16 +23,11 @@
   "bugs": {
     "url": "https://github.com/angular/benchpress/issues"
   },
-  "bin": {
-    "benchpress": "bin/benchpress"
-  },
   "homepage": "https://github.com/angular/benchpress",
-  "devDependencies": {
+  "dependencies": {
     "http-server": "^0.6.1",
     "karma": "^0.12.21",
-    "rimraf": "^2.2.8"
-  },
-  "dependencies": {
+    "rimraf": "^2.2.8",
     "bootstrap": "^3.2.0",
     "underscore": "^1.6.0"
   }
