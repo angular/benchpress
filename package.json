@@ -1,5 +1,5 @@
 {
-  "name": "benchpress",
+  "name": "angular-benchpress",
   "version": "0.0.1",
   "description": "A macro benchmark runner for JavaScript Web apps",
   "main": "lib/bp.js",
