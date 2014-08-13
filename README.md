@@ -1,5 +1,5 @@
 
-# Benchpress Lite
+# Benchpress
 
 Benchpress allows creation and sampling of macro benchmarks to compare performance of real world
 web applications. The project is built and maintained by the [Angular](https://github.com/angular)
