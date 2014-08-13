@@ -72,6 +72,10 @@ module.exports = function(config) {
 For Mac and Linux computers, a utility script is included to launch Chrome Canary with special
 flags to allow manual garbage collection, as well as high resolution memory reporting. Unless
 Chrome Canary is used, these features are not available, and reports will be lacking information.
+Samples will also have more outliers with more expensive test runs because garbage collection timing
+is left up to the VM.
+
+This launches Chrome Canary in Incognito Mode for more accurate testing.
 
 ```
 $ ./bin/launch_chrome
