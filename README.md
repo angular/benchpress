@@ -35,6 +35,7 @@ evaluated and timed.
 ```javascript
 window.benchmarkSteps.push({
   name: 'Something Expensive',
+  description: 'Lengthy description of benchmark...',
   fn: function() {
     someExpensiveOperation();
   }

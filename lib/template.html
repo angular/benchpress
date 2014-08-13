@@ -13,7 +13,6 @@
       .bpLink { background: lightblue; padding: 1em; margin-bottom: 1.5em; }
       .row.average { font-weight: bold; background: #eee; border-bottom: 1px solid #CCC; padding: 12px 0; margin-bottom: 12px; }
       .row.headings { font-size: 18px; font-weight: bold; }
-      .average .title { font-size: 28px; }
       .scrollable { max-height:250px !important; overflow-y: auto; }
     </style>
 </head>
@@ -62,7 +61,10 @@
 
           <script type="template" id="infoTemplate">
             <div class="row average">
-              <div class="td col-md-2 title"><%= name %></div>
+              <div class="td col-md-2 title">
+                <h1><%= name %></h1>
+                <p><%= description %></p>
+              </div>
               <div class="td col-md-2">
                 mean: <%= testTime.avg.mean.toFixed(2) %>ms
                 &plusmn; <%= Math.round(testTime.avg.coefficientOfVariation * 100) %>%
