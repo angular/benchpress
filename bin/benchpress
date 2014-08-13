@@ -22,6 +22,9 @@ switch (process.argv[2]) {
     launchChrome();
     break;
   default:
+    console.log('Unknown command: ', process.argv[2]);
+    console.log('Acceptable commands are "build", "run", "launch_chrome"');
+    console.log('benchpress version ', require('../package.json').version);
 }
 
 function launchChrome () {
