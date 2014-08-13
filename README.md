@@ -7,7 +7,7 @@ team, and is used to test performance of [AngularJS](https://github.com/angular/
 with these frameworks.
 
 ```
-$ npm install angular-benchpress
+$ npm install -g angular-benchpress
 ```
 
 ## Creating Benchmarks
@@ -20,8 +20,8 @@ Starting in a project's web app's directory:
    runner template. This is where the markup for the app being tested should live.
     This is required, although it may be empty.
  1. Create any scripts, html files, or other dependent files in the same folder
- 1. Run `./node_modules/bin/benchpress build` to generate the combined benchmark runner in "benchpress-build/" within the web app
- 1. Still in the web app directory, execute `./node_modules/.bin/benchpress run`
+ 1. Run `benchpress build` to generate the combined benchmark runner in "benchpress-build/" within the web app
+ 1. Still in the web app directory, execute `benchpress run`
  1. Launch Browser (Chrome Canary provides most accurate memory data, See
     [Launching Canary](#launching-canary) for instructions on testing in Chrome
     Canary)
