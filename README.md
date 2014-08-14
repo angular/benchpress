@@ -67,6 +67,15 @@ module.exports = function(config) {
 }
 ```
 
+## CLI
+
+The CLI has three commands:
+
+```
+$ benchpress build --build-path=optional/path
+$ benchpress run //Starts serving cwd at :3339
+$ benchpress launch_chrome //Launches Chrome Canary as described below
+
 ## Launching Canary
 
 For Mac and Linux computers, a utility script is included to launch Chrome Canary with special
@@ -78,7 +87,7 @@ is left up to the VM.
 This launches Chrome Canary in Incognito Mode for more accurate testing.
 
 ```
-$ ./bin/launch_chrome
+$ benchpress launch_chrome
 ```
 
 ## Running Benchmarks
