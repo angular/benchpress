@@ -1,6 +1,6 @@
 {
   "name": "angular-benchpress",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A macro benchmark runner for JavaScript Web apps",
   "main": "lib/bp.js",
   "bin": {
