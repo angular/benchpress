@@ -13,9 +13,9 @@ $ npm install -g angular-benchpress
 ## Creating Benchmarks
 
 Starting in a project's web app's directory:
-
- 1. Create a directory in benchmarks/<benchmark-name>
- 1. In benchmarks/<benchmark-name>, create a [config file](#benchpress-config) called "bp.conf.js" to specify scripts to load in this benchmark
+ 1. Create a directory called "benchmarks" (or some other name if the build step will be provided)
+ 1. Create a directory in benchmarks/&lt;benchmark-name&gt;
+ 1. In benchmarks/&lt;benchmark-name&gt;, create a [config file](#benchpress-config) called "bp.conf.js" to specify scripts to load in this benchmark
  1. Add a file called "main.html" which is the html that will be interpolated into the benchmark
    runner template. This is where the markup for the app being tested should live.
     This is required, although it may be empty.
