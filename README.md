@@ -25,7 +25,7 @@ Starting in a project's web app's directory:
  1. Launch Browser (Chrome Canary provides most accurate memory data, See
     [Launching Canary](#launching-canary) for instructions on testing in Chrome
     Canary)
- 1. Browse to `localhost:3339/benchpress-build/<benchmark-name>`
+ 1. Browse to `localhost:3339`
 
 The benchpress library adds an array to the window object called "benchmarkSteps," which is where
 a benchmark should push benchmark configuration objects. The object should contain a `name`, which
