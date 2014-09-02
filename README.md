@@ -10,6 +10,10 @@ with these frameworks.
 $ npm install -g angular-benchpress
 ```
 
+## Status: In-Development
+
+Expect frequent breaking changes.
+
 ## Creating Benchmarks
 
 Starting in a project's web app's directory:
