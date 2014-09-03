@@ -77,7 +77,7 @@ The CLI has three commands:
 
 ```
 $ benchpress build --build-path=optional/path
-$ benchpress run //Starts serving cwd at :3339
+$ benchpress run --build-path=optional/path //Starts serving cwd at :3339. Will redirect '/' to build-path
 $ benchpress launch_chrome //Launches Chrome Canary as described below
 ```
 
