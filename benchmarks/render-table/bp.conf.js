@@ -5,6 +5,10 @@ module.exports = function(config) {
         id: 'tableRender',
         src: 'table-render.js'
       }
-    ]
+    ],
+    modules: [{
+      id: 'myModule',
+      src: 'myModule.es6'
+    }]
   })
 };

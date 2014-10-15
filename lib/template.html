@@ -2,11 +2,12 @@
 <html>
 <head>
    <title>Big Table Benchmark</title>
-    <script>
-      var scripts = %%SCRIPTS%%;
-    </script>
     <script src="underscore-min.js"></script>
     <script src="bp.js"></script>
+    <script>
+      bp.scripts = %%SCRIPTS%%;
+      bp.modules = %%MODULES%%;
+    </script>
 
     <link rel="stylesheet" href="bootstrap.min.css">
     <style>
@@ -199,6 +200,9 @@
     </div>
     %%PLACEHOLDER%%
   </div>
+  <script>
+    bp.Document.loadNextScript();
+  </script>
 </body>
 </html>
 
