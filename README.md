@@ -31,13 +31,13 @@ Starting in a project's web app's directory:
     Canary)
  1. Browse to `localhost:3339`
 
-The benchpress library adds an array to the window object called "benchmarkSteps," which is where
+The benchpress library adds an array to the global `bp` object called "benchmarkSteps," which is where
 a benchmark should push benchmark configuration objects. The object should contain a `name`, which
 is what the benchmark shows up as in the report, and a `fn`, which is the function that gets
 evaluated and timed.
 
 ```javascript
-window.benchmarkSteps.push({
+bp.benchmarkSteps.push({
   name: 'Something Expensive',
   description: 'Lengthy description of benchmark...',
   fn: function() {
