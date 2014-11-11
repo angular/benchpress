@@ -31,7 +31,7 @@ Starting in a project's web app's directory:
     Canary)
  1. Browse to `localhost:3339`
 
-The benchpress library adds an array to the global `bp` object called "benchmarkSteps," which is where
+The benchpress library adds an array to the global `bp` object called "steps," which is where
 a benchmark should push benchmark configuration objects. The object should contain a `name`, which
 is what the benchmark shows up as in the report, and a `fn`, which is the function that gets
 evaluated and timed.
@@ -43,8 +43,54 @@ bp.benchmarkSteps.push({
   fn: function() {
     someExpensiveOperation();
   }
-})
+});
 ```
+
+Benchpress also exposes an API to manage variables of a test run, useful for comparing test runs
+under different code conditions. This API is exposed on `bp.Variables`, and has the following
+methods and properties:
+
+ * bp.Variables.add({value: 'ngBindOnce'});
+ * bp.Variables.addMany([{value: 'ngBindOnce'},{value: 'baseline'}]);
+ * bp.Variables.select('ngBindOnce'); //Select variable by value
+ * bp.Variables.selected; //{value:'ngBindOnce'}
+ * bp.Variables.variables; //Array of available variables
+
+
+A variable should be an object with at least a value property, which is a string. Other properties
+may be added.
+
+Here's how an AngularJS benchmark would incorporate Benchpress variables:
+
+```javascript
+$scope.$watch(function() {return ctrl.benchmarkType}, function(newVal, oldVal) {
+  bp.Variables.select(newVal);
+});
+bp.Variables.add({
+  value: 'none',
+  label: 'none'
+});
+$scope.variableStates = bp.Variables.variables;
+ctrl.benchmarkType = bp.Variables.selected? bp.Variables.selected.value : undefined;
+```
+
+```html
+<div ng-repeat="state in variableStates">{{state.label}}: <input type="radio" name="variableState" ng-model="ctrl.benchmarkType" ng-value="state.value"></div>
+```
+
+See the example in `benchmarks/largetable` for full reference.
+
+Variables are optional, and are a no-op as far as benchpress is concerned. Benchpress relies on
+the benchmark code to read and manipulate variable state to change the actual execution of the
+steps under test. Benchpress provides this API since mosts tests implement variables of some sort,
+and Benchpress would have a hard time running tests programmatically with variables without some
+notion of variables.
+
+The default variable to be executed can be provided in the search string of the url using the
+"variable" parameter name, ie
+`http://localhost:3339/benchpress-build/largetable?variable=ngBindOnce`.
+
+There is one variable state set for all steps at any given time.
 
 ### Preparation and cleanup
 
