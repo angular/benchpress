@@ -11,7 +11,7 @@
       <div ng-repeat="state in variableStates">{{state.label}}: <input type="radio" name="variableState" ng-model="ctrl.benchmarkType" ng-value="state.value"></div>
 
 
-      <ng-switch on="benchmarkType">
+      <ng-switch on="ctrl.benchmarkType">
         <baseline-binding-table ng-switch-when="baselineBinding">
         </baseline-binding-table>
         <baseline-interpolation-table ng-switch-when="baselineInterpolation">

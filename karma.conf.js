@@ -9,13 +9,22 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'browserify'],
 
 
     // list of files / patterns to load in the browser
     files: [
+      'lib/rx.all.js',
       'lib/bp.js',
-      'lib/bp.spec.js',
+      'lib/Runner.js',
+      'lib/Document.js',
+      'lib/HtmlReport.js',
+      'lib/Measure.js',
+      'lib/RunState.js',
+      'lib/Statistics.js',
+      'lib/Utils.js',
+      'lib/Variables.js',
+      'test/bp.spec.js',
       'node_modules/underscore/underscore.js'
     ],
 
@@ -29,6 +38,11 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
     reporters: ['progress'],
+
+    preprocessors: {
+      'lib/*.js': ['browserify'],
+      'test/*.js': ['browserify']
+    },
 
 
     // web server port
@@ -57,6 +71,10 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: ['Chrome'],
+
+    browserify: {
+      debug: true
+    },
 
 
     // If browser does not capture in given timeout [ms], kill it

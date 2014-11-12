@@ -64,10 +64,10 @@ app.controller('DataController', function($scope, $rootScope, $window) {
   });
 
   $scope.$watch(function() {return ctrl.benchmarkType}, function(newVal, oldVal) {
-    bp.Variables.select(newVal);
+    bp.variables.select(newVal);
   });
 
-  bp.Variables.addMany([
+  bp.variables.addMany([
     {
       value: 'none',
       label: 'none'
@@ -100,8 +100,8 @@ app.controller('DataController', function($scope, $rootScope, $window) {
       label: 'interpolation + filter'
     }
   ]);
-  $scope.variableStates = bp.Variables.variables;
-  ctrl.benchmarkType = bp.Variables.selected? bp.Variables.selected.value : undefined;
+  $scope.variableStates = bp.variables.variables;
+  ctrl.benchmarkType = bp.variables.selected? bp.variables.selected.value : undefined;
 });
 
 var fn = function() { return 'x'};

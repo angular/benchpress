@@ -5,8 +5,7 @@
     <script src="underscore-min.js"></script>
     <script src="bp.js"></script>
     <script>
-      bp.scripts = %%SCRIPTS%%;
-      bp.modules = %%MODULES%%;
+      bp._scripts.addMany(%%SCRIPTS%%);
     </script>
 
     <link rel="stylesheet" href="bootstrap.min.css">
@@ -31,14 +30,14 @@
         <div class="col-lg-8">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#controls" role="tab" data-toggle="tab" onclick="bp.Document.openTab('#controls')">Controls</a></li>
+            <li class="active"><a href="#controls" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#controls')">Controls</a></li>
             <li>
-              <a href="#script-overrides" role="tab" data-toggle="tab" onclick="bp.Document.openTab('#script-overrides')">
+              <a href="#script-overrides" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#script-overrides')">
                 Scripts
               </a>
             </li>
             <li>
-              <a href="#tips" role="tab" data-toggle="tab" onclick="bp.Document.openTab('#tips')">
+              <a href="#tips" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#tips')">
                 Tips
               </a>
             </li>
@@ -57,10 +56,10 @@
                 </div>
               </form>
               <div class="btn-group">
-                <button class="loopBtn btn btn-default">Loop</button>
-                <button class="onceBtn btn btn-default">Once</button>
-                <button class="twentyFiveBtn btn btn-default">Loop 25x</button>
-                <button class="profileBtn btn btn-default">Profile</button>
+                <button class="bp-btn loopBtn btn btn-default">Loop</button>
+                <button class="bp-btn onceBtn btn btn-default">Once</button>
+                <button class="bp-btn twentyFiveBtn btn btn-default">Loop 25x</button>
+                <button class="bp-btn profileBtn btn btn-default">Profile</button>
               </div>
             </div>
             <div class="tab-pane" id="script-overrides">
@@ -201,7 +200,7 @@
     %%PLACEHOLDER%%
   </div>
   <script>
-    bp.Document.loadNextScript();
+    bp.doc.loadNextScript();
   </script>
 </body>
 </html>
