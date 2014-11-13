@@ -177,11 +177,11 @@ describe('bp', function() {
 
 
   describe('.document', function() {
-    var doc, values, scripts, utils;
+    var doc, values, scripts, utils, runState;
 
     beforeEach(function() {
       testing.use(MockGlobals).as(Globals);
-      testing.inject(Document, Values, ClientScripts, Utils, function(d, v, s, u) {
+      testing.inject(Document, Values, ClientScripts, Utils, RunState, function(d, v, s, u, rs) {
         doc = d;
         doc._container = document.createElement('div');
         var scriptsTemplate = document.createElement('div')
@@ -190,6 +190,7 @@ describe('bp', function() {
         scripts = s;
         values = v;
         utils = u;
+        runState = rs;
       });
     });
 
@@ -203,7 +204,7 @@ describe('bp', function() {
 
     describe('.onSampleRangeChanged()', function() {
       beforeEach(testing.inject(Runner, function(runner) {
-        runner.resetIterations();
+        runState.resetIterations();
       }));
 
 
@@ -406,7 +407,7 @@ describe('bp', function() {
       }));
 
       it('should call resetIterations before calling done', function() {
-        var spy = spyOn(runner, 'resetIterations');
+        var spy = spyOn(runState, 'resetIterations');
         runState.iterations = 0;
         runner.runAllTests();
         expect(spy).toHaveBeenCalled();
