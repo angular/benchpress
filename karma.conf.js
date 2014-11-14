@@ -14,24 +14,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/rx.all.js',
-      'lib/bp.js',
-      'lib/Runner.js',
-      'lib/Document.js',
-      'lib/HtmlReport.js',
-      'lib/Measure.js',
-      'lib/RunState.js',
-      'lib/Statistics.js',
-      'lib/Utils.js',
-      'lib/Variables.js',
-      'test/bp.spec.js',
+      'lib/*.js',
+      'test/*.js',
       'node_modules/underscore/underscore.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-
+      'lib/cli.js'
     ],
 
 
