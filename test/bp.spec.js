@@ -589,41 +589,4 @@ describe('bp', function() {
       });
     });
   });
-
-
-  describe('RunState', function() {
-    var runState, report;
-    beforeEach(function() {
-      testing.inject(RunState, function(r) {
-        runState = r;
-      });
-    });
-
-
-    it('should set default properties', function() {
-      expect(runState.iterations).toBe(0);
-      expect(runState.numSamples).toBe(20);
-      expect(runState.recentResult).toEqual({});
-    });
-
-
-    describe('.setIterations()', function() {
-      it('should set provided arguments to runState object', function() {
-        runState.setIterations(15);
-        expect(runState.numSamples).toBe(20);
-        expect(runState.iterations).toBe(15);
-      });
-    });
-
-
-    describe('.resetIterations()', function() {
-      it('should set runState object to defaults', function() {
-        runState.numSamples = 50;
-        runState.iterations = 99;
-        runState.resetIterations();
-        expect(runState.numSamples).toBe(20);
-        expect(runState.iterations).toBe(0);
-      });
-    });
-  });
 });
