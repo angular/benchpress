@@ -102,6 +102,7 @@ app.controller('DataController', function($scope, $rootScope, $window) {
   ]);
   $scope.variableStates = bp.variables.variables;
   ctrl.benchmarkType = bp.variables.selected? bp.variables.selected.value : undefined;
+  bp.runner.ready();
 });
 
 var fn = function() { return 'x'};
