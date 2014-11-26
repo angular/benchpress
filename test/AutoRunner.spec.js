@@ -89,17 +89,32 @@ describe('AutoRunner', function() {
 
 
   describe('.runAllTests()', function() {
-    it('should return an observable', function() {
-      expect(typeof autoRunner.runAllTests().subscribe).toBe('function');
+    it('should run for the specified number of iterations', function() {
+      var complete;
+      runs(function(){
+        spyOn(autoRunner, 'runAllTests').andCallThrough();
+        autoRunner.runAllTests(10).subscribe(function() {
+        }, null, function() {
+          complete = true;
+        });
+      });
+
+      waitsFor(function() {
+        return complete;
+      }, 'complete to be true', 1000);
+
+      runs(function() {
+        expect(autoRunner.runAllTests.callCount).toBe(11);
+      });
     });
 
 
     it('should call onComplete on the subject when iterations reaches 0', function() {
-      var onCompleteSpy = jasmine.createSpy('onComplete');
+      var onCompletedSpy = jasmine.createSpy('onCompleted');
       var disposeSpy = jasmine.createSpy('dispose');
-      autoRunner.subject = {onComplete: onCompleteSpy, dispose: disposeSpy};
+      autoRunner.subject = {onCompleted: onCompletedSpy, dispose: disposeSpy};
       autoRunner.runAllTests(0);
-      expect(onCompleteSpy).toHaveBeenCalled();
+      expect(onCompletedSpy).toHaveBeenCalled();
       expect(disposeSpy).toHaveBeenCalled();
       expect(autoRunner.subject).toBeUndefined();
     });
