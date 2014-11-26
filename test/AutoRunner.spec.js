@@ -31,6 +31,14 @@ describe('AutoRunner', function() {
         iterations: '100'
       });
     });
+
+
+    it('should set autoClose on runState if __bpAutoClose__ is true in search params', function() {
+      expect(runState.headless).toBeUndefined();
+      globals._window.location.search = '?__bpAutoClose__=true';
+      autoRunner.bootstrap();
+      expect(runState.headless).toBe(true);
+    });
   });
 
 
@@ -83,6 +91,17 @@ describe('AutoRunner', function() {
   describe('.runAllTests()', function() {
     it('should return an observable', function() {
       expect(typeof autoRunner.runAllTests().subscribe).toBe('function');
+    });
+
+
+    it('should call onComplete on the subject when iterations reaches 0', function() {
+      var onCompleteSpy = jasmine.createSpy('onComplete');
+      var disposeSpy = jasmine.createSpy('dispose');
+      autoRunner.subject = {onComplete: onCompleteSpy, dispose: disposeSpy};
+      autoRunner.runAllTests(0);
+      expect(onCompleteSpy).toHaveBeenCalled();
+      expect(disposeSpy).toHaveBeenCalled();
+      expect(autoRunner.subject).toBeUndefined();
     });
   });
 });
