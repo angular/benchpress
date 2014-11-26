@@ -177,18 +177,17 @@ describe('bp', function() {
 
 
   describe('.document', function() {
-    var doc, values, scripts, utils, runState;
+    var doc, scripts, utils, runState;
 
     beforeEach(function() {
       testing.use(MockGlobals).as(Globals);
-      testing.inject(Document, Values, ClientScripts, Utils, RunState, function(d, v, s, u, rs) {
+      testing.inject(Document, ClientScripts, Utils, RunState, function(d, s, u, rs) {
         doc = d;
         doc._container = document.createElement('div');
         var scriptsTemplate = document.createElement('div')
         scriptsTemplate.setAttribute('id', 'scriptTemplate');
         doc._container.appendChild(scriptsTemplate);
         scripts = s;
-        values = v;
         utils = u;
         runState = rs;
       });
@@ -209,9 +208,9 @@ describe('bp', function() {
 
 
       it('should change the numSamples property', function() {
-        expect(values.defaultNumSamples).toBe(20);
+        expect(runState.numSamples).toBe(20);
         doc.onSampleInputChanged({target: {value: '80'}});
-        expect(values.defaultNumSamples).toBe(80);
+        expect(runState.numSamples).toBe(80);
       });
     });
 
@@ -516,14 +515,13 @@ describe('bp', function() {
 
 
   describe('.report', function() {
-    var report, doc, measure, stats, values, runner, runState;
+    var report, doc, measure, stats, runner, runState;
     beforeEach(function() {
-      testing.inject(Document, Report, RunState, Runner, Steps, Values, function(d,r,rs,run,s,v) {
+      testing.inject(Document, Report, RunState, Runner, Steps, function(d,r,rs,run,s) {
         d.infoTemplate = jasmine.createSpy('infoTemplate');
         report = r;
         runner = run;
         runState = rs;
-        values = v;
         s.add(mockStep);
       });
 
@@ -576,8 +574,8 @@ describe('bp', function() {
 
 
     describe('.rightSizeTimes()', function() {
-      it('should make remove the left side of the input if longer than numSamples', function() {
-        values.defaultNumSamples = 3;
+      it('should remove the left side of the input if longer than numSamples', function() {
+        runState.numSamples = 3;
         expect(report.rightSizeTimes([0,1,2,3,4,5,6])).toEqual([4,5,6]);
       });
 
