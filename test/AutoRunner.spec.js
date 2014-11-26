@@ -49,8 +49,8 @@ describe('AutoRunner', function() {
         fn();
       }
       autoRunner.ready();
-      expect(autoRunner.runBenchmark.calls[0].args[0].iterations).toBe(20);
-      expect(autoRunner.runBenchmark.calls[0].args[0].numSamples).toBe(15);
+      expect(autoRunner.runBenchmark.calls[0].args[0].iterations).toBe(runState.iterations);
+      expect(autoRunner.runBenchmark.calls[0].args[0].numSamples).toBe(runState.numSamples);
     });
   });
 

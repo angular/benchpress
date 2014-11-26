@@ -19,8 +19,8 @@ describe('RunState', function() {
 
 
   it('should set default properties', function() {
-    expect(runState.iterations).toBe(20);
-    expect(runState.numSamples).toBe(15);
+    expect(runState.iterations).toBe(25);
+    expect(runState.numSamples).toBe(20);
     expect(runState.recentResult).toEqual({});
   });
 
@@ -28,8 +28,13 @@ describe('RunState', function() {
   describe('.setIterations()', function() {
     it('should set provided arguments to runState object', function() {
       runState.setIterations(15);
-      expect(runState.numSamples).toBe(15);
       expect(runState.iterations).toBe(15);
+    });
+
+    it('should reduce numSamples to iterations if greater', function() {
+      runState.numSamples = 25;
+      runState.setIterations(20);
+      expect(runState.numSamples).toBe(20);
     });
   });
 
@@ -39,8 +44,8 @@ describe('RunState', function() {
       runState.numSamples = 50;
       runState.iterations = 99;
       runState.resetIterations();
-      expect(runState.numSamples).toBe(5);
-      expect(runState.iterations).toBe(20);
+      expect(runState.numSamples).toBe(20);
+      expect(runState.iterations).toBe(25);
     });
   });
 
