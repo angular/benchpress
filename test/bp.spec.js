@@ -16,7 +16,6 @@ describe('bp', function() {
   var Statistics = require('../lib/Statistics');
   var Steps = require('../lib/Steps');
   var Utils = require('../lib/Utils');
-  var Values = require('../lib/Values');
   var Variables = require('../lib/Variables.js');
 
   describe('.variables', function() {
@@ -569,21 +568,6 @@ describe('bp', function() {
 
       it('should return an string report', function() {
         expect(typeof report.calcStats()).toBe('string');
-      });
-    });
-
-
-    describe('.rightSizeTimes()', function() {
-      it('should remove the left side of the input if longer than numSamples', function() {
-        runState.numSamples = 3;
-        expect(report.rightSizeTimes([0,1,2,3,4,5,6])).toEqual([4,5,6]);
-      });
-
-
-      it('should return the whole list if shorter than or equal to numSamples', function() {
-        runState.numSamples = 7;
-        expect(report.rightSizeTimes([0,1,2,3,4,5,6])).toEqual([0,1,2,3,4,5,6]);
-        expect(report.rightSizeTimes([0,1,2,3,4,5])).toEqual([0,1,2,3,4,5]);
       });
     });
   });
