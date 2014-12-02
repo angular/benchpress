@@ -6,6 +6,7 @@ describe('bp', function() {
     name: 'fakeStep'
   };
 
+  var Aggregator = require('../lib/Aggregator');
   var Document = require('../lib/Document');
   var Globals = require('../lib/Globals');
   var MockGlobals = require('./MockGlobals');
@@ -516,7 +517,8 @@ describe('bp', function() {
   describe('.report', function() {
     var report, doc, measure, stats, runner, runState;
     beforeEach(function() {
-      testing.inject(Document, Report, RunState, Runner, Steps, function(d,r,rs,run,s) {
+      testing.inject(Aggregator, Document, Report, RunState, Runner, Steps, function(a,d,r,rs,run,s) {
+        aggregator = a;
         d.infoTemplate = jasmine.createSpy('infoTemplate');
         report = r;
         runner = run;
@@ -535,7 +537,7 @@ describe('bp', function() {
         }
       };
 
-      report.timesPerAction = {
+      aggregator.timesPerAction = {
         fakeStep: {
           testTime: {
             history: [3,7]
@@ -559,10 +561,10 @@ describe('bp', function() {
     describe('.calcStats()', function() {
       it('should set the most recent time for each step to the next entry', function() {
         report.calcStats();
-        expect(report.timesPerAction.fakeStep.testTime.history[2]).toBe(5);
+        expect(aggregator.timesPerAction.fakeStep.testTime.history[2]).toBe(5);
         runState.recentResult.fakeStep.testTime = 25;
         report.calcStats();
-        expect(report.timesPerAction.fakeStep.testTime.history[3]).toBe(25);
+        expect(aggregator.timesPerAction.fakeStep.testTime.history[3]).toBe(25);
       });
 
 

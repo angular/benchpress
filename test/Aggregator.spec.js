@@ -26,4 +26,12 @@ describe('Aggregator', function() {
       expect(aggregator.trimSamples([0,1,2,3,4,5])).toEqual([0,1,2,3,4,5]);
     });
   });
+
+
+  describe('.getTimesPerAction()', function() {
+    it('should return the time for the action if already set', function() {
+      aggregator.timesPerAction['foo'] = {name: 'foo'};
+      expect(aggregator.getTimesPerAction('foo').name).toBe('foo');
+    });
+  });
 });
