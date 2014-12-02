@@ -30,21 +30,13 @@ describe('RunState', function() {
       runState.setIterations(15);
       expect(runState.iterations).toBe(15);
     });
-
-    it('should reduce numSamples to iterations if greater', function() {
-      runState.numSamples = 25;
-      runState.setIterations(20);
-      expect(runState.numSamples).toBe(20);
-    });
   });
 
 
   describe('.resetIterations()', function() {
     it('should set runState object to defaults', function() {
-      runState.numSamples = 50;
       runState.iterations = 99;
       runState.resetIterations();
-      expect(runState.numSamples).toBe(20);
       expect(runState.iterations).toBe(25);
     });
   });
