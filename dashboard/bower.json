@@ -1,0 +1,18 @@
+{
+  "name": "dashboard",
+  "version": "0.2.1",
+  "homepage": "https://github.com/jeffbcross/benchpress",
+  "authors": [
+    "Jeff Cross <middlefloor@gmail.com>"
+  ],
+  "description": "Benchpress dashboard",
+  "main": "index.html",
+  "license": "Apache 2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
