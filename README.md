@@ -80,7 +80,7 @@ ctrl.benchmarkType = bp.Variables.selected? bp.Variables.selected.value : undefi
 
 See the example in `benchmarks/largetable` for full reference.
 
-Variables are optional, and are a no-op as far as benchpress is concerned. Benchpress relies on
+Variables are optional and are a no-op as far as benchpress is concerned. Benchpress relies on
 the benchmark code to read and manipulate variable state to change the actual execution of the
 steps under test. Benchpress provides this API since mosts tests implement variables of some sort,
 and Benchpress would have a hard time running tests programmatically with variables without some
