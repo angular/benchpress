@@ -1,5 +1,7 @@
 angular.module('benchpressDashboard').
-  controller('BenchmarkController', ['$routeParams', '$scope', 'runContexts', 'runState', function($routeParams, $scope, runContexts, runState){
+  controller('BenchmarkController', [
+      '$routeParams', '$scope', 'runContexts', 'runState', 'benchmarksService' ,
+      function($routeParams, $scope, runContexts, runState, benchmarksService) {
     $scope.runContexts = runContexts;
     $scope.runState = runState;
     $scope.benchmarkName = $routeParams.name;
@@ -74,6 +76,10 @@ angular.module('benchpressDashboard').
         }
       }
     }
+
+    benchmarksService.get().then(function() {
+      benchmarksService.select($routeParams.name);
+    });
 
     //TODO: get this from a service
     $scope.overrideScripts = [{

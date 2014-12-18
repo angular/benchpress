@@ -1,12 +1,21 @@
 describe('BenchmarkController', function() {
-  var $controller, $rootScope;
+  var $controller, $rootScope, $httpBackend, mockAPI, benchmarksService;
 
   beforeEach(function(){
-    module('ngRoute', 'benchpressDashboard', 'bpdRunStateService', 'bpdRunContextsService');
-    inject(function(_$controller_, _$rootScope_, $routeParams) {
+    module(
+        'ngRoute',
+        'benchpressDashboard',
+        'bpdRunStateService',
+        'bpdRunContextsService',
+        'bpdMockAPI',
+        'bpdBenchmarksService');
+    inject(function(_$controller_, _$rootScope_, $routeParams, _mockAPI_, _benchmarksService_, _$httpBackend_) {
       $controller = _$controller_;
       $routeParams.name = 'foo-benchmark';
       $rootScope = _$rootScope_;
+      mockAPI = _mockAPI_;
+      benchmarksService = _benchmarksService_;
+      $httpBackend = _$httpBackend_;
     });
   });
 
@@ -26,5 +35,18 @@ describe('BenchmarkController', function() {
     var scope = $rootScope.$new();
     controllerFactory(scope);
     expect(scope.selectedTab).toBe('Controls');
+  });
+
+
+  it('should set the selected benchmark to the benchmarksService', function() {
+    var scope = $rootScope.$new();
+    $httpBackend.whenGET('/api/benchmarks').respond(mockAPI['/api/benchmarks']);
+    var controller = $controller('BenchmarkController', {
+      $scope: scope,
+      $routeParams: {name: mockAPI['/api/benchmarks'].benchmarks[0].name}
+    });
+    $httpBackend.flush();
+
+    expect(benchmarksService.selected()).toEqual(mockAPI['/api/benchmarks'].benchmarks[0]);
   });
 });
