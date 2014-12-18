@@ -7,6 +7,7 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'app.js',
       'components/**/*',
+      'benchmark/**.js',
       '*.js'
     ],
     exclude: ['karma.conf.js'],

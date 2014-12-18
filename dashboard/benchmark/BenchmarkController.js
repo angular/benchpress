@@ -1,4 +1,10 @@
 angular.module('benchpressDashboard').
-  controller('BenchmarkController', [function(){
-
+  controller('BenchmarkController', ['$routeParams', '$scope', function($routeParams, $scope){
+    $scope.benchmarkName = $routeParams.name;
+    $scope.selectedTab = 'Controls';
+    $scope.tabs = [
+      'Controls',
+      'Scripts',
+      'Tips'
+    ];
   }]);

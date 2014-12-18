@@ -1,30 +1,22 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
-      <h1>Benchpress</h1><a href="/#/">« all benchmarks</a>
-
+      <h1>Benchpress: {{benchmarkName}}</h1><a href="/#/">« all benchmarks</a>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-8">
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#controls" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#controls')">Controls</a></li>
-        <li>
-          <a href="#script-overrides" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#script-overrides')">
-            Scripts
-          </a>
-        </li>
-        <li>
-          <a href="#tips" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#tips')">
-            Tips
+        <li ng-repeat="tab in tabs" ng-class="{'active':selectedTab == tab}">
+          <a role="tab" ng-click="$parent.selectedTab = tab">
+            {{tab}}
           </a>
         </li>
       </ul>
-
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane active" id="controls">
+        <div class="tab-pane active" ng-show="selectedTab == 'Controls'">
           <form role="form" class="form-vertical">
             <div class="form-group">
               <label for="sampleRange">
@@ -41,7 +33,7 @@
             <button class="bp-btn profileBtn btn btn-default">Profile</button>
           </div>
         </div>
-        <div class="tab-pane" id="script-overrides">
+        <div class="tab-pane active" ng-show="selectedTab == 'Scripts'">
           <br>
           <p>
             The following scripts can be overridden by adding query params in the current window
@@ -67,7 +59,7 @@
       </tbody>
           </table>
         </div>
-        <div class="tab-pane" id="tips">
+        <div class="tab-pane active" ng-show="selectedTab == 'Tips'">
           <h3>Incognito Recommended</h3>
           <p>
             It's recommended to open a new Incognito Window before each test run/loop.
