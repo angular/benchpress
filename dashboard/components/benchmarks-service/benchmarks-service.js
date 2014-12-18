@@ -2,10 +2,13 @@ angular.module('bpdBenchmarksService', []).
   service('benchmarksService', ['$http', function($http) {
     var selectedName, benchmarksCache;
 
-    this.get = function() {
+    this.get = function(options) {
+      if (options && options.cacheOk && benchmarksCache) {
+        return benchmarksCache;
+      }
       return $http.get('/api/benchmarks').then(function(res) {
         benchmarksCache = res.data;
-        return res;
+        return benchmarksCache;
       });
     };
 

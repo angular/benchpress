@@ -75,9 +75,9 @@ angular.module('benchpressDashboard').
           }
         }
       }
-    }
+    };
 
-    benchmarksService.get().then(function() {
+    benchmarksService.get({cacheOk: true}).then(function() {
       benchmarksService.select($routeParams.name);
     });
 
