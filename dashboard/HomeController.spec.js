@@ -1,16 +1,15 @@
 describe('HomeController', function() {
   var benchmarksService;
   var $controller;
-  var mockAPIs = {
-    '/api/benchmarks': {benchmarks:[{name: 'largetable'},{name:'render-table'}]}
-  };
+  var mockAPI
 
   beforeEach(function(){
-    module('benchpressDashboard', 'bpdBenchmarksService');
-    inject(function(_benchmarksService_, _$controller_) {
+    module('benchpressDashboard', 'bpdBenchmarksService', 'bpdMockAPI');
+    inject(function(_benchmarksService_, _mockAPI_, _$controller_) {
       benchmarksService = _benchmarksService_;
       spyOn(benchmarksService, 'get').andCallThrough();
       $controller = _$controller_;
+      mockAPI = _mockAPI_;
     });
   });
 
@@ -22,12 +21,12 @@ describe('HomeController', function() {
 
   it('should load the available benchmarks from the server', inject(function($httpBackend, $rootScope) {
     var scope = $rootScope.$new();
-    $httpBackend.whenGET('/api/benchmarks').respond(mockAPIs['/api/benchmarks']);
+    $httpBackend.whenGET('/api/benchmarks').respond(mockAPI['/api/benchmarks']);
     var controller = controllerFactory(scope);
     scope.$digest();
     expect(benchmarksService.get).toHaveBeenCalled();
     $httpBackend.flush();
-    expect(scope.benchmarks).toEqual(mockAPIs['/api/benchmarks'].benchmarks);
+    expect(scope.benchmarks).toEqual(mockAPI['/api/benchmarks'].benchmarks);
   }));
 
 

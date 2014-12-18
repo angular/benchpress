@@ -9,6 +9,7 @@ module.exports = function(config) {
       'bower_components/angular/angular.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'test/mock-api.js',
       'app.js',
       'components/iframe-runner-directive/iframe-runner.js',
       'components/**/*',
