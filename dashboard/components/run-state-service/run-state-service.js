@@ -4,15 +4,14 @@ angular.module('bpdRunStateService', ['bpdRunContextsService']).
   service('runState', ['runContexts', RunStateService]);
 
 function RunStateService(runContexts) {
-  this._defaults = {
-    iterations: 25,
-    numSamples: 20
-  };
+  this._defaultIterations = 25;
+  this._defaultNumSamples = 20;
   this._running = false;
   this.recentResult = {};
   this._context = runContexts.IFRAME;
   this._runContexts = runContexts;
 }
+
 RunStateService.prototype = {
   get defaults () {
     return this._defaults;
@@ -29,15 +28,29 @@ RunStateService.prototype = {
       }
     }.bind(this));
   },
+  get defaultIterations() {
+    return this._defaultIterations;
+  },
+  set defaultIterations(value) {
+    if (typeof value !== 'number') throw new Error('iterations must be of type number, got: '+typeof value);
+    this._defaultIterations = value;
+  },
+  get defaultNumSamples() {
+    return this._defaultNumSamples;
+  },
+  set defaultNumSamples(value) {
+    if (typeof value !== 'number') throw new Error('numSamples must be of type number, got: '+typeof value);
+    this._defaultNumSamples = value;
+  },
   get iterations() {
-    return this._iterations || this.defaults.iterations;
+    return this._iterations || this.defaultIterations;
   },
   set iterations(value) {
     if (typeof value !== 'number') throw new Error('iterations value must be a number');
     this._iterations = value;
   },
   get numSamples () {
-    return this._numSamples || this.defaults.numSamples;
+    return this._numSamples || this.defaultNumSamples;
   },
   set numSamples (value) {
     if (typeof value !== 'number') throw new Error('numSamples value must be a number');
@@ -65,8 +78,9 @@ RunStateService.prototype = {
     if (!valid) throw new Error(value+' is not a valid running context enumerable value');
     this._context = value;
   },
-  resetIterations: function () {
-    this.iterations = this.defaults.iterations;
+  resetDefaults: function () {
+    this.iterations = this.defaultIterations;
+    this.numSamples = this.defaultNumSamples;
   }
 }
 

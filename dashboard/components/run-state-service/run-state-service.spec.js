@@ -24,32 +24,46 @@ describe('runStateService', function() {
   });
 
 
-  describe('.resetIterations()', function() {
-    it('should set runState object to defaults', function() {
+  describe('.resetDefaults()', function() {
+    it('should set runState values to defaults', function() {
       runState.iterations = 99;
-      runState.resetIterations();
+      runState.numSamples = 98;
+      expect(runState.iterations).toBe(99);
+      expect(runState.numSamples).toBe(98);
+      runState.resetDefaults();
       expect(runState.iterations).toBe(25);
+      expect(runState.numSamples).toBe(20);
     });
   });
 
 
-  describe('.defaults', function() {
-    it('should override defaults with defaults specified in params', function() {
-      runState.defaults = {iterations: 10, numSamples: 5};
-      expect(runState.numSamples).toBe(5);
-      expect(runState.defaults.numSamples).toBe(5);
+  describe('.defaultIterations', function() {
+    it('should override defaults if set directly', function() {
+      runState.defaultIterations = 10;
       expect(runState.iterations).toBe(10);
-      expect(runState.defaults.iterations).toBe(10);
+      expect(runState.defaultIterations).toBe(10);
     });
 
 
     it('should throw if provided non number values', function() {
       expect(function() {
-        runState.defaults = {iterations:'foo'};
+        runState.defaultIterations = 'foo';
       }).toThrow('iterations must be of type number, got: string');
+    });
+  });
 
+
+  describe('.defaultNumSamples', function() {
+    it('should override defaults if set directly', function() {
+      runState.defaultNumSamples = 10;
+      expect(runState.numSamples).toBe(10);
+      expect(runState.defaultNumSamples).toBe(10);
+    });
+
+
+    it('should throw if provided non number values', function() {
       expect(function() {
-        runState.defaults = {numSamples: 'bar'};
+        runState.defaultNumSamples = 'bar';
       }).toThrow('numSamples must be of type number, got: string');
     });
   });
