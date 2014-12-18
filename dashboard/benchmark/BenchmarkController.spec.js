@@ -2,7 +2,7 @@ describe('BenchmarkController', function() {
   var $controller, $rootScope;
 
   beforeEach(function(){
-    module('ngRoute', 'benchpressDashboard', 'bpdRunStateService');
+    module('ngRoute', 'benchpressDashboard', 'bpdRunStateService', 'bpdRunContextsService');
     inject(function(_$controller_, _$rootScope_, $routeParams) {
       $controller = _$controller_;
       $routeParams.name = 'foo-benchmark';

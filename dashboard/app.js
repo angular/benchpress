@@ -1,7 +1,10 @@
 angular.module('benchpressDashboard', [
-  'ngRoute',
-  'bpdBenchmarksService',
-  'bpdRunStateService']).
+    'bpdBenchmarksService',
+    'bpdIframeRunnerDirective',
+    'bpdRunContextsService',
+    'bpdRunStateService',
+    'ngRoute'
+  ]).
   config(['$routeProvider', function($routeProvider) {
     $routeProvider.
       when('/', {

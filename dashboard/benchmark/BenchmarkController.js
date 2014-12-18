@@ -1,5 +1,7 @@
 angular.module('benchpressDashboard').
-  controller('BenchmarkController', ['$routeParams', '$scope', 'runStateService', function($routeParams, $scope, runStateService){
+  controller('BenchmarkController', ['$routeParams', '$scope', 'runContexts', 'runStateService', function($routeParams, $scope, runContexts, runStateService){
+    $scope.runContext = runContexts.IFRAME;
+    $scope.runState = runStateService;
     $scope.benchmarkName = $routeParams.name;
     $scope.selectedTab = 'Controls';
     $scope.tabs = [
@@ -7,8 +9,7 @@ angular.module('benchpressDashboard').
       'Scripts',
       'Tips'
     ];
-    //TODO: get this value from service
-    $scope.sampleRange = 20;
+
     $scope.runBtns = [{
       label: 'Loop',
       value: -1
@@ -80,11 +81,16 @@ angular.module('benchpressDashboard').
       currentPath: '/angular.js'
     }];
 
-    $scope.$watch('sampleRange', function(newVal) {
-      runStateService.numSamples = newVal;
-    });
-
     this.runBenchmark = function(val) {
+      $scope.runningBenchmark = true;
+      switch($scope.runContext) {
+        case runContexts.IFRAME:
+          //TODO: whatever setup needs to happen
+          break;
+        case runContexts.WINDOW:
+
+          break;
+      }
       //TODO: implement and test
     };
   }]);
