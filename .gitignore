@@ -2,3 +2,5 @@ node_modules/
 .DS_Store
 benchpress-build/
 build/
+dashboard/bower_components/
+
