@@ -7,6 +7,7 @@ angular.module('bpdIframeRunnerDirective').
         scope.runState = runState;
       },
       controller: 'IframeRunnerController',
+      controllerAs: 'iframeCtrl',
       templateUrl: 'components/iframe-runner-directive/iframe-runner-directive.html'
     }
   }]);

@@ -1,15 +1,16 @@
 describe('iframeRunnerDirective', function() {
-  var $compile, $rootScope, runState;
+  var $compile, $rootScope, benchmarksService, runState;
 
   beforeEach(function(){
     module(
         'bpdIframeRunnerDirective',
         'components/iframe-runner-directive/iframe-runner-directive.html');
-    inject(function(_$compile_, _$rootScope_, _runContexts_, _runState_) {
+    inject(function(_$compile_, _$rootScope_, _benchmarksService_, _runContexts_, _runState_) {
       $compile = _$compile_;
       $rootScope = _$rootScope_;
       runContexts = _runContexts_;
       runState = _runState_;
+      benchmarksService = _benchmarksService_;
     });
   });
 
@@ -52,6 +53,8 @@ describe('iframeRunnerDirective', function() {
 
     describe('.frameSrc()', function() {
       it('should return the correct url with all parameters added to query string', function() {
+        benchmarksService._benchmarksCache = {benchmarks: [{name: 'largetable'}]};
+        benchmarksService.select('largetable');
         runState.iterations = 30;
         runState.numSamples = 29;
         expect(controller.frameSrc()).toBe('/benchmarks/largetable/main.html?numSamples=29&iterations=30');

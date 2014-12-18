@@ -4,10 +4,13 @@ angular.module('bpdIframeRunnerDirective').
       function($scope, benchmarksService, runState) {
 
     this.frameSrc = function () {
-      //TODO: real benchmark name
+      var selected = benchmarksService.selected();
+      if (!selected || typeof selected.name !== 'string') return;
       //TODO: support adding scripts and variables
       return [
-        '/benchmarks/largetable/main.html',
+        '/benchmarks/',
+        selected.name,
+        '/main.html',
         this.allOrNothing('numSamples', [runState.numSamples], true),
         this.allOrNothing('iterations', [runState.iterations]),
         ].join('');
