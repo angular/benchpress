@@ -1,0 +1,183 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Benchpress</h1><a href="/#/">« all benchmarks</a>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-8">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#controls" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#controls')">Controls</a></li>
+        <li>
+          <a href="#script-overrides" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#script-overrides')">
+            Scripts
+          </a>
+        </li>
+        <li>
+          <a href="#tips" role="tab" data-toggle="tab" onclick="bp.doc.openTab('#tips')">
+            Tips
+          </a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="controls">
+          <form role="form" class="form-vertical">
+            <div class="form-group">
+              <label for="sampleRange">
+                Select number of samples to collect and average:
+                <span id="sampleRangeValue"></span>
+              </label>
+              <input id="sampleRange" class="form-control" type="text" value="20">
+            </div>
+          </form>
+          <div class="btn-group">
+            <button class="bp-btn loopBtn btn btn-default">Loop</button>
+            <button class="bp-btn onceBtn btn btn-default">Once</button>
+            <button class="bp-btn twentyFiveBtn btn btn-default">Loop 25x</button>
+            <button class="bp-btn profileBtn btn btn-default">Profile</button>
+          </div>
+        </div>
+        <div class="tab-pane" id="script-overrides">
+          <br>
+          <p>
+            The following scripts can be overridden by adding query params in the current window
+            where key is the script's id, and value is the path to the new script to test with.
+          </p>
+          <table class="scripts table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  id to override
+                </th>
+                <th>
+                  current path
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+
+        <tr>
+          <td>?angular=/custom/path</td>
+          <td>angular.js</td>
+        </tr>
+      </tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="tips">
+          <h3>Incognito Recommended</h3>
+          <p>
+            It's recommended to open a new Incognito Window before each test run/loop.
+            Running in Incognito prevents user-added extensions from running, and provides more
+            accurate data since optimizations and artifacts that the JavaScript engine may have
+            collected from previous test runs will not be present.
+          </p>
+
+          <h3>Don't Touch Anything During Runs</h3>
+          <p>
+            Any user activity, such as scrolling or backgrounding the browser window, could affect the performance of the code under test. Most consistent samples are collected by kicking off a test and keeping hands away from the keyboard and mouse until the test run is finished.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Results:</h2>
+      <div class="table table-striped results-table">
+        <div class="thead">
+          <div class="row headings">
+            <div class="th col-md-2 col-md-offset-2">
+              test time (ms)
+            </div>
+            <div class="th col-md-2">
+              gc time (ms)
+            </div>
+            <div class="th col-md-2">
+              garbage (KB)
+            </div>
+            <div class="th col-md-2">
+              retained memory (KB)
+            </div>
+          </div>
+        </div>
+        <div class="tbody info"></div>
+      </div>
+      <hr>
+
+      <script type="template" id="infoTemplate">
+        <div class="row average">
+          <div class="td col-md-2 title">
+            <h1><%= name %></h1>
+            <p><%= description %></p>
+          </div>
+          <div class="td col-md-2">
+            mean: <%= testTime.avg.mean.toFixed(2) %>ms
+            &plusmn; <%= Math.round(testTime.avg.coefficientOfVariation * 100) %>%
+            <br>
+            (stddev <%= testTime.avg.stdDev.toFixed(2) %>)
+            <br>
+            (min <%= testTime.min.toFixed(2) %> /
+             max <%= testTime.max.toFixed(2) %>)
+          </div>
+          <div class="td col-md-2">
+            mean: <%= gcTime.avg.mean.toFixed(2) %>ms
+            <br>
+            (combined: <%= (testTime.avg.mean + gcTime.avg.mean).toFixed(2) %>ms)
+          </div>
+          <div class="td col-md-2">
+            mean: <%= (garbageCount.avg.mean / 1e3).toFixed(2) %>KB
+          </div>
+          <div class="td col-md-2">
+            mean: <%= (retainedCount.avg.mean / 1e3).toFixed(2) %>KB
+          </div>
+        </div>
+        <div class="row scrollable">
+          <div class="td col-md-2 col-md-offset-2">
+            <div class="sampleContainer">
+              <% _.each(testTime.history, function(time) { %>
+                <%= time.toFixed(2) %>
+                <br>
+              <% }); %>
+            </div>
+          </div>
+          <div class="td col-md-2">
+            <div class="sampleContainer">
+              <% _.each(gcTime.history, function(time) { %>
+                <%= time.toFixed(2) %>
+                <br>
+              <% }); %>
+            </div>
+          </div>
+          <div class="td col-md-2">
+            <div class="sampleContainer">
+              <% _.each(garbageCount.history, function(count) { %>
+                <%= (count / 1e3).toFixed(2) %>
+                <br>
+              <% }); %>
+            </div>
+          </div>
+          <div class="td col-md-2">
+            <div class="sampleContainer">
+              <% _.each(retainedCount.history, function(count) { %>
+                <%= (count / 1e3).toFixed(2) %>
+                <br>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </script>
+
+      <script type="template" id="scriptTemplate">
+        <tr>
+          <td>?<%= id %>=/custom/path</td>
+          <td><%= src %></td>
+        </tr>
+      </script>
+    </div>
+  </div>
+</div>

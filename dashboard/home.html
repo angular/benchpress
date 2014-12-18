@@ -1,0 +1,11 @@
+<h1>Available Benchmarks</h1>
+<ul>
+  <li ng-repeat="benchmark in benchmarks">
+    <a ng-href="/#/benchmark/{{benchmark.name}}" ng-bind="benchmark.name"></a>
+  </li>
+</ul>
+<div class="alert alert-danger" ng-show="responseError">
+  Could not load benchmarks:<br>
+  <b>Status Code: </b> {{responseError.code}}<br>
+  <b>Response Body: </b> {{responseError.body}}
+</div>
