@@ -33,7 +33,7 @@ describe('runStateService', function() {
   });
 
 
-  describe('.setDefaults()', function() {
+  describe('.defaults', function() {
     it('should override defaults with defaults specified in params', function() {
       runState.defaults = {iterations: 10, numSamples: 5};
       expect(runState.numSamples).toBe(5);
@@ -51,6 +51,75 @@ describe('runStateService', function() {
       expect(function() {
         runState.defaults = {numSamples: 'bar'};
       }).toThrow('numSamples must be of type number, got: string');
+    });
+  });
+
+
+  describe('.context', function() {
+    describe('getter', function() {
+      it('should return IFRAME by default', function() {
+        expect(runState.context).toBe(runContexts.IFRAME);
+      });
+
+
+      it('should return correct value after being set', function() {
+        expect(runState.context).toBe(runContexts.IFRAME);
+        runState.context = runContexts.WINDOW;
+        expect(runState.context).toBe(runContexts.WINDOW);
+        runState.context = runContexts.IFRAME;
+        expect(runState.context).toBe(runContexts.IFRAME);
+      });
+    });
+
+
+    describe('setter', function() {
+      it('should set the value', function() {
+        expect(runState.context).toBe(runContexts.IFRAME);
+        runState.context = runContexts.WINDOW;
+        expect(runState.context).toBe(runContexts.WINDOW);
+        expect(runState._context).toBe(runContexts.WINDOW);
+      });
+
+
+      it('should throw if value other than acceptable enumerable is given', function() {
+        expect(function(){
+          runState.context = 3;
+        }).toThrow(new Error('3 is not a valid running context enumerable value'));
+      });
+    });
+  });
+
+  describe('.running', function() {
+    describe('getter', function() {
+      it('should return false by default', function() {
+        expect(runState.running).toBe(false);
+      });
+
+
+      it('should return correct value after being set', function() {
+        expect(runState.running).toBe(false);
+        runState.running = true;
+        expect(runState.running).toBe(true);
+        runState.running = false;
+        expect(runState.running).toBe(false);
+      });
+    });
+
+
+    describe('setter', function() {
+      it('should set the value', function() {
+        expect(runState.running).toBe(false);
+        runState.running = true;
+        expect(runState.running).toBe(true);
+        expect(runState._running).toBe(true);
+      });
+
+
+      it('should throw if value other than boolean is given', function() {
+        expect(function(){
+          runState.running = 'yep';
+        }).toThrow(new Error('"running" must be a boolean value'));
+      });
     });
   });
 });
