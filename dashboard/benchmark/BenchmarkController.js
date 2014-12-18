@@ -1,7 +1,7 @@
 angular.module('benchpressDashboard').
-  controller('BenchmarkController', ['$routeParams', '$scope', 'runContexts', 'runStateService', function($routeParams, $scope, runContexts, runStateService){
+  controller('BenchmarkController', ['$routeParams', '$scope', 'runContexts', 'runState', function($routeParams, $scope, runContexts, runState){
     $scope.runContext = runContexts.IFRAME;
-    $scope.runState = runStateService;
+    $scope.runState = runState;
     $scope.benchmarkName = $routeParams.name;
     $scope.selectedTab = 'Controls';
     $scope.tabs = [

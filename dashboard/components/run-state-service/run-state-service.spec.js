@@ -1,55 +1,55 @@
-describe('runStateServiceService', function() {
-  var runStateService;
+describe('runStateService', function() {
+  var runState;
 
   beforeEach(function() {
     module('bpdRunStateService');
-    inject(function(_runStateService_) {
-      runStateService = _runStateService_;
+    inject(function(_runState_) {
+      runState = _runState_;
     });
   });
 
 
   it('should set default properties', function() {
-    expect(runStateService.iterations).toBe(25);
-    expect(runStateService.numSamples).toBe(20);
-    expect(runStateService.recentResult).toEqual({});
+    expect(runState.iterations).toBe(25);
+    expect(runState.numSamples).toBe(20);
+    expect(runState.recentResult).toEqual({});
   });
 
 
   describe('.setIterations()', function() {
-    it('should set provided arguments to runStateService object', function() {
-      runStateService.iterations = 15;
-      expect(runStateService.iterations).toBe(15);
+    it('should set provided arguments to runState object', function() {
+      runState.iterations = 15;
+      expect(runState.iterations).toBe(15);
     });
   });
 
 
   describe('.resetIterations()', function() {
-    it('should set runStateService object to defaults', function() {
-      runStateService.iterations = 99;
-      runStateService.resetIterations();
-      expect(runStateService.iterations).toBe(25);
+    it('should set runState object to defaults', function() {
+      runState.iterations = 99;
+      runState.resetIterations();
+      expect(runState.iterations).toBe(25);
     });
   });
 
 
   describe('.setDefaults()', function() {
     it('should override defaults with defaults specified in params', function() {
-      runStateService.defaults = {iterations: 10, numSamples: 5};
-      expect(runStateService.numSamples).toBe(5);
-      expect(runStateService.defaults.numSamples).toBe(5);
-      expect(runStateService.iterations).toBe(10);
-      expect(runStateService.defaults.iterations).toBe(10);
+      runState.defaults = {iterations: 10, numSamples: 5};
+      expect(runState.numSamples).toBe(5);
+      expect(runState.defaults.numSamples).toBe(5);
+      expect(runState.iterations).toBe(10);
+      expect(runState.defaults.iterations).toBe(10);
     });
 
 
     it('should throw if provided non number values', function() {
       expect(function() {
-        runStateService.defaults = {iterations:'foo'};
+        runState.defaults = {iterations:'foo'};
       }).toThrow('iterations must be of type number, got: string');
 
       expect(function() {
-        runStateService.defaults = {numSamples: 'bar'};
+        runState.defaults = {numSamples: 'bar'};
       }).toThrow('numSamples must be of type number, got: string');
     });
   });

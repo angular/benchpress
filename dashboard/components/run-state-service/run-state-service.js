@@ -1,5 +1,5 @@
 angular.module('bpdRunStateService', []).
-  value('runStateService', {
+  value('runState', {
     _defaults: {
       iterations: 25,
       numSamples: 20
