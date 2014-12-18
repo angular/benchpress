@@ -2,7 +2,7 @@ describe('BenchmarkController', function() {
   var $controller, $rootScope;
 
   beforeEach(function(){
-    module('ngRoute', 'benchpressDashboard');
+    module('ngRoute', 'benchpressDashboard', 'bpdRunStateService');
     inject(function(_$controller_, _$rootScope_, $routeParams) {
       $controller = _$controller_;
       $routeParams.name = 'foo-benchmark';
@@ -25,6 +25,6 @@ describe('BenchmarkController', function() {
   it('should select controls tab by default', function() {
     var scope = $rootScope.$new();
     controllerFactory(scope);
-    expect(scope.selectedTab).toBe('controls');
+    expect(scope.selectedTab).toBe('Controls');
   });
 });
