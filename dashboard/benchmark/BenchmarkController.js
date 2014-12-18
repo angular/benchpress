@@ -82,8 +82,8 @@ angular.module('benchpressDashboard').
     }];
 
     this.runBenchmark = function(val) {
-      $scope.runningBenchmark = true;
-      switch(runState.runContext) {
+      runState.running = true;
+      switch(runState.context) {
         case runContexts.IFRAME:
           //TODO: whatever setup needs to happen
           break;

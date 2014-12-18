@@ -13,7 +13,8 @@ angular.module('benchpressDashboard', [
       }).
       when('/benchmark/:name', {
         templateUrl: 'benchmark/benchmark.html',
-        controller: 'BenchmarkController'
+        controller: 'BenchmarkController',
+        controllerAs: 'ctrl'
       }).
       otherwise({redirectTo: '/'});
   }]);

@@ -1,0 +1,8 @@
+
+<div>
+  <iframe ng-if="runState.running && runState.context == runContexts.IFRAME" ng-src="{{frameSrc()}}">
+  </iframe>
+  <div ng-if="runState.context == runContexts.IFRAME && !runState.running" class="alert alert-info">
+    IFrame will be rendered here when the test begins.
+  </div>
+</div>
