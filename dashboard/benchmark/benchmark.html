@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-md-6 col-lg-4 col-sm-12">
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li ng-repeat="tab in tabs" ng-class="{'active':selectedTab == tab}">
@@ -23,6 +23,37 @@
                 Select number of samples to collect and average:
               </label>
               <input ng-model="runState.numSamples" class="form-control" type="number">
+            </div>
+          </form>
+          <form role="form" class="form-vertical">
+            <div class="form-group">
+              <label for="runState.context">
+                Select context in which the benchmark should run.
+              </label>
+
+              <select ng-options="val as key for (key, val) in runContexts" ng-model="runState.context"></select>
+              <div class="alert alert-info">
+                <span ng-show="runState.context == runContexts.IFRAME">
+                  <p>
+                    The benchmark will run within a visible iframe within this same window, and will
+                    stream result data from the benchmark into the reporting portion of this window.
+                    </p>
+                    <p>
+                    Each test run will create a new iframe, and the iframe will be removed when the
+                    test is complete.
+                  </p>
+                </span>
+                <span ng-show="runState.context == runContexts.WINDOW">
+                  <p>
+                    The benchmark will run within a visible iframe within this same window, and will
+                    stream result data from the benchmark into the reporting portion of this window.
+                  </p>
+                  <p>
+                    Each test run will create a new window, and the window will be closed when the
+                    test is complete.
+                  </p>
+                </span>
+              </div>
             </div>
           </form>
           <div class="btn-group">

@@ -1,6 +1,6 @@
 angular.module('benchpressDashboard').
   controller('BenchmarkController', ['$routeParams', '$scope', 'runContexts', 'runState', function($routeParams, $scope, runContexts, runState){
-    $scope.runContext = runContexts.IFRAME;
+    $scope.runContexts = runContexts;
     $scope.runState = runState;
     $scope.benchmarkName = $routeParams.name;
     $scope.selectedTab = 'Controls';
@@ -83,7 +83,7 @@ angular.module('benchpressDashboard').
 
     this.runBenchmark = function(val) {
       $scope.runningBenchmark = true;
-      switch($scope.runContext) {
+      switch(runState.runContext) {
         case runContexts.IFRAME:
           //TODO: whatever setup needs to happen
           break;
