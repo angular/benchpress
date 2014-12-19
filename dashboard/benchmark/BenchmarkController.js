@@ -1,9 +1,10 @@
 angular.module('benchpressDashboard').
   controller('BenchmarkController', [
-      '$routeParams', '$scope', 'runContexts', 'runState', 'benchmarksService' ,
-      function($routeParams, $scope, runContexts, runState, benchmarksService) {
+      '$routeParams', '$scope', 'runContexts', 'runState', 'benchmarksService', 'stats',
+      function($routeParams, $scope, runContexts, runState, benchmarksService, stats) {
     $scope.runContexts = runContexts;
     $scope.runState = runState;
+    $scope.stats = stats;
     $scope.benchmarkName = $routeParams.name;
     $scope.selectedTab = 'Controls';
     $scope.tabs = [
@@ -22,6 +23,7 @@ angular.module('benchpressDashboard').
       label: 'Loop 25x',
       value: 25
     },{
+      //TODO: make profile work
       label: 'Profile',
       value: 'profile'
     }];
@@ -41,41 +43,6 @@ angular.module('benchpressDashboard').
     //TODO: get from service
     $scope.measurements = ['testTime', 'gcTime', 'garbageCount', 'retainedCount'];
 
-    //TODO: get from service
-    $scope.stats = {
-      'create': {
-        testTime: {
-          avg: {
-            mean: 50.54321,
-            coefficientOfVariation: 0.04,
-            stdDev: 5.654321
-          },
-          min: 5,
-          max: 15
-        },
-        gcTime: {
-          avg: {
-            mean: 50.54321,
-            coefficientOfVariation: 0.04,
-            stdDev: 5.654321
-          }
-        },
-        garbageCount: {
-          avg: {
-            mean: 50.54321,
-            coefficientOfVariation: 0.04,
-            stdDev: 5.654321
-          }
-        },
-        retainedCount: {
-          avg: {
-            mean: 50.54321,
-            coefficientOfVariation: 0.04,
-            stdDev: 5.654321
-          }
-        }
-      }
-    };
 
     benchmarksService.get({cacheOk: true}).then(function() {
       benchmarksService.select($routeParams.name);
@@ -88,10 +55,10 @@ angular.module('benchpressDashboard').
     }];
 
     this.runBenchmark = function(val) {
+      runState.iterations = val;
       runState.running = true;
       switch(runState.context) {
         case runContexts.IFRAME:
-          //TODO: whatever setup needs to happen
           break;
         case runContexts.WINDOW:
 

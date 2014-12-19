@@ -1,25 +1,39 @@
-angular.module('bpdIframeStreamerDirective', ['bpdRunStateService']).
-  directive('bpdIframeStreamer', ['$interval', '$rootScope', 'runState', function($interval, $rootScope, runState) {
+(function(){
+
+angular.module('bpdIframeStreamerDirective', ['bpdRunStateService', 'bpdStatsService']).
+  directive('bpdIframeStreamer', ['$interval', function($interval) {
     return {
       restrict: 'A',
-      link: function(scope, el, attrs) {
-        var timeout = 1000;
+      controller: 'IframeStreamerController',
+      link: function(scope, el, attrs, ctrl) {
+        var timeout = 100;
         var elapsed = 0;
-        var waitForContentWindow = $interval(function() {
-          elapsed+= 50;
+
+        // We have to wait for the window to be attached because it happens after the iframe is
+        // added to the document
+        scope.waitForContentWindow = $interval(function() {
+          elapsed+= 5;
           if (el[0].contentWindow) {
-            el[0].contentWindow.addEventListener('benchpressComplete', function() {
-              runState.running = false;
-              $rootScope.$digest();
-            });
-            $interval.cancel(waitForContentWindow);
+            el[0].contentWindow.addEventListener('benchpressComplete', ctrl.onComplete);
             return;
           }
           if (elapsed >= timeout) {
-            $interval.cancel(waitForContentWindow);
             throw new Error('Timed out waiting for iframe.contentWindow to be defined');
           }
-        }, 50);
+        }, 5, timeout / 5, false);
+
+        el.on('$destroy', function() {
+          $interval.cancel(scope.waitForContentWindow);
+        });
       }
     }
+  }]).
+  controller('IframeStreamerController', ['$rootScope', 'runState', 'stats', function($rootScope, runState, stats) {
+    this.onComplete = function(evt) {
+      runState.running = false;
+      stats.current = evt.result;
+      $rootScope.$digest();
+    };
   }]);
+
+}());

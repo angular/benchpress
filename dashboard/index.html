@@ -12,8 +12,15 @@
   <script type="text/javascript" src="components/iframe-runner-directive/iframe-runner-directive.js"></script>
   <script type="text/javascript" src="components/iframe-runner-directive/iframe-runner-controller.js"></script>
   <script type="text/javascript" src="components/run-contexts-service/run-contexts-service.js"></script>
+  <script type="text/javascript" src="components/stats-service/stats-service.js"></script>
   <script type="text/javascript" src="components/iframe-streamer-directive/iframe-streamer-directive.js"></script>
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  .bpLink { background: lightblue; padding: 1em; margin-bottom: 1.5em; }
+  .row.average { font-weight: bold; background: #eee; border-bottom: 1px solid #CCC; padding: 12px 0; margin-bottom: 12px; }
+  .row.headings { font-size: 18px; font-weight: bold; }
+  .scrollable { max-height:250px !important; overflow-y: auto; }
+</style>
 </head>
 <body ng-app="benchpressDashboard" ng-strict-di>
   <ng-view></ng-view>

@@ -129,39 +129,39 @@
           </div>
         </div>
         <div class="tbody info">
-          <div class="row average" ng-repeat="step in steps">
+          <div class="row average" ng-repeat-start="(key, val) in stats.current">
             <div class="td col-md-2 title">
-              <h1>{{step.name}}</h1>
-              <p>{{step.description}}</p>
+              <h1>{{key}}</h1>
             </div>
             <div class="td col-md-2">
-              mean: {{ stats[step.name].testTime.avg.mean | number:2 }}ms
-              &plusmn; {{ stats[step.name].testTime.avg.coefficientOfVariation * 100 | number:0 }}%
+              mean: {{ val.testTime.avg.mean | number:2 }}ms
+              &plusmn; {{ val.testTime.avg.coefficientOfVariation * 100 | number:0 }}%
               <br>
-              (stddev {{ stats[step.name].testTime.avg.stdDev | number:2 }})
+              (stddev {{ val.testTime.avg.stdDev | number:2 }})
               <br>
-              (min {{ stats[step.name].testTime.min | number:2 }} /
-               max {{ stats[step.name].testTime.max | number:2 }})
+              (min {{ val.testTime.min | number:2 }} /
+               max {{ val.testTime.max | number:2 }})
             </div>
             <div class="td col-md-2">
-              mean: {{ stats[step.name].gcTime.avg.mean | number:2 }}ms
+              mean: {{ val.gcTime.avg.mean | number:2 }}ms
               <br>
-              (combined: {{ (stats[step.name].testTime.avg.mean + stats[step.name].gcTime.avg.mean) | number:2 }}ms)
+              (combined: {{ (val.testTime.avg.mean + val.gcTime.avg.mean) | number:2 }}ms)
             </div>
             <div class="td col-md-2">
-              mean: {{ (stats[step.name].garbageCount.avg.mean / 1e3) | number:2 }}KB
+              mean: {{ (val.garbageCount.avg.mean / 1e3) | number:2 }}KB
             </div>
             <div class="td col-md-2">
-              mean: {{ (stats[step.name].retainedCount.avg.mean / 1e3) | number:2 }}KB
+              mean: {{ (val.retainedCount.avg.mean / 1e3) | number:2 }}KB
             </div>
           </div>
-          <div class="row scrollable">
+          <div ng-repeat-end="(key, val) in stats.current" class="row scrollable">
             <div class="td col-md-2"
                  ng-repeat="measurement in measurements"
                  ng-class="{'col-md-offset-2':!$index}">
               <div class="sampleContainer">
-                <span ng-repeat="result in stats[step.name][measurement].history">
+                <span ng-repeat="result in val[measurement].history track by $index">
                   {{ result | number:2 }}
+                  <br>
                 </span>
               </div>
             </div>
