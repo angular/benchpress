@@ -1,5 +1,6 @@
 angular.module('bpdIframeRunnerDirective', [
     'bpdBenchmarksService',
     'bpdRunContextsService',
-    'bpdRunStateService'
+    'bpdRunStateService',
+    'bpdIframeStreamerDirective'
   ]);

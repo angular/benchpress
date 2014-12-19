@@ -13,6 +13,7 @@ angular.module('bpdIframeRunnerDirective').
         '/main.html',
         this.allOrNothing('numSamples', [runState.numSamples], true),
         this.allOrNothing('iterations', [runState.iterations]),
+        this.allOrNothing('__bpAutoClose__', [true])
         ].join('');
     };
 
@@ -21,7 +22,7 @@ angular.module('bpdIframeRunnerDirective').
       //undefined values or empty arrays
       if (Array.isArray(values) && values.length > 0) {
         values.forEach(function(val) {
-          if (typeof val === 'string' || typeof val === 'number') {
+          if (['string', 'boolean', 'number'].indexOf(typeof val) > -1) {
             retValue += (first?'?':'&')+name+'='+val;
             first = false;
           }

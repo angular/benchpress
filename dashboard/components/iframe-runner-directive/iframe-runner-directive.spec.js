@@ -57,7 +57,7 @@ describe('iframeRunnerDirective', function() {
         benchmarksService.select('largetable');
         runState.iterations = 30;
         runState.numSamples = 29;
-        expect(controller.frameSrc()).toBe('/benchmarks/largetable/main.html?numSamples=29&iterations=30');
+        expect(controller.frameSrc()).toBe('/benchmarks/largetable/main.html?numSamples=29&iterations=30&__bpAutoClose__=true');
       });
     });
 

@@ -1,3 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <title></title>
+  <script src="underscore-min.js"></script>
+  <script src="auto-bp.js"></script>
+  <script>
+    bp._scripts.addMany([{"id":"jquery","src":"jquery-noop.js"},{"id":"angular","src":"angular.js"},{"src":"app.js"}]);
+  </script>
+</head>
+<body id="benchmarkContainer">
+
 <style>
 [ng-cloak] { display: none; }
 </style>
@@ -66,3 +78,8 @@
     </div>
   </div>
 </div>
+<script>
+  bp.doc.loadNextScript();
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 
 <div>
   {{frameSrc()}}
-  <iframe ng-if="runState.running && runState.context == runContexts.IFRAME" ng-src="{{iframeCtrl.frameSrc()}}">
+  <iframe ng-if="runState.running && runState.context == runContexts.IFRAME" bpd-iframe-streamer ng-src="{{iframeCtrl.frameSrc()}}">
   </iframe>
   <div ng-if="runState.context == runContexts.IFRAME && !runState.running" class="alert alert-info">
     IFrame will be rendered here when the test begins.

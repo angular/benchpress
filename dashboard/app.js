@@ -3,6 +3,7 @@ angular.module('benchpressDashboard', [
     'bpdIframeRunnerDirective',
     'bpdRunContextsService',
     'bpdRunStateService',
+    'bpdIframeStreamerDirective',
     'ngRoute'
   ]).
   config(['$routeProvider', function($routeProvider) {
