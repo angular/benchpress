@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h2>Results:</h2>
+    <div class="table table-striped results-table">
+      <div class="thead">
+        <div class="row headings">
+          <div class="th col-md-2 col-md-offset-2">
+            test time (ms)
+          </div>
+          <div class="th col-md-2">
+            gc time (ms)
+          </div>
+          <div class="th col-md-2">
+            garbage (KB)
+          </div>
+          <div class="th col-md-2">
+            retained memory (KB)
+          </div>
+        </div>
+      </div>
+      <div class="tbody info">
+        <div class="row average" ng-repeat-start="(key, val) in stats.current">
+          <div class="td col-md-2 title">
+            <h1>{{key}}</h1>
+          </div>
+          <div class="td col-md-2">
+            mean: {{ val.testTime.avg.mean | number:2 }}ms
+            &plusmn; {{ val.testTime.avg.coefficientOfVariation * 100 | number:0 }}%
+            <br>
+            (stddev {{ val.testTime.avg.stdDev | number:2 }})
+            <br>
+            (min {{ val.testTime.min | number:2 }} /
+             max {{ val.testTime.max | number:2 }})
+          </div>
+          <div class="td col-md-2">
+            mean: {{ val.gcTime.avg.mean | number:2 }}ms
+            <br>
+            (combined: {{ (val.testTime.avg.mean + val.gcTime.avg.mean) | number:2 }}ms)
+          </div>
+          <div class="td col-md-2">
+            mean: {{ (val.garbageCount.avg.mean / 1e3) | number:2 }}KB
+          </div>
+          <div class="td col-md-2">
+            mean: {{ (val.retainedCount.avg.mean / 1e3) | number:2 }}KB
+          </div>
+        </div>
+        <div ng-repeat-end="(key, val) in stats.current" class="row scrollable">
+          <div class="td col-md-2"
+               ng-repeat="measurement in measurements"
+               ng-class="{'col-md-offset-2':!$index}">
+            <div class="sampleContainer">
+              <span ng-repeat="result in val[measurement].history track by $index">
+                {{ result | number:2 }}
+                <br>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>

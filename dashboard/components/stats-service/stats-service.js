@@ -21,6 +21,7 @@ function StatsService (escapeDollarSigns) {
   this._escapeDollarSigns = escapeDollarSigns;
 }
 
+//TODO: support streaming stats
 StatsService.prototype = {
   get current() {
     return this._stats;
