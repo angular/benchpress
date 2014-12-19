@@ -7,5 +7,14 @@ angular.module('bpdMockAPI', []).
       },{
         name:'render-table',
         description: 'a normal sized table is destroyed and created'
+      }]},
+    '/benchmarks/largetable/scripts.json': {
+      "scripts":[{
+        "id":"jquery",
+        "src":"jquery-noop.js"
+      },{
+        "id":"angular","src":"angular.js"
+      },{
+        "src":"app.js"
       }]}
   });

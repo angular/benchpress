@@ -1,7 +1,7 @@
 angular.module('benchpressDashboard').
   controller('BenchmarkController', [
-      '$routeParams', '$scope', 'runContexts', 'runState', 'benchmarksService', 'stats',
-      function($routeParams, $scope, runContexts, runState, benchmarksService, stats) {
+      '$routeParams', '$scope', 'runContexts', 'runState', 'benchmarksService', 'stats', 'scripts',
+      function($routeParams, $scope, runContexts, runState, benchmarksService, stats, scripts) {
     $scope.runContexts = runContexts;
     $scope.runState = runState;
     $scope.stats = stats;
@@ -43,27 +43,17 @@ angular.module('benchpressDashboard').
     //TODO: get from service
     $scope.measurements = ['testTime', 'gcTime', 'garbageCount', 'retainedCount'];
 
-
     benchmarksService.get({cacheOk: true}).then(function() {
       benchmarksService.select($routeParams.name);
     });
 
-    //TODO: get this from a service
-    $scope.overrideScripts = [{
-      id: 'angular',
-      currentPath: '/angular.js'
-    }];
+    scripts.get().then(function(data) {
+      $scope.overrideScripts = data.scripts;
+    });
 
+    //TODO: support profiling
     this.runBenchmark = function(val) {
       runState.iterations = val;
       runState.running = true;
-      switch(runState.context) {
-        case runContexts.IFRAME:
-          break;
-        case runContexts.WINDOW:
-
-          break;
-      }
-      //TODO: implement and test
     };
   }]);
