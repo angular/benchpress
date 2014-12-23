@@ -15,6 +15,7 @@ angular.module('bpdIframeStreamerDirective', ['bpdRunStateService', 'bpdStatsSer
           elapsed+= 5;
           if (el[0].contentWindow) {
             el[0].contentWindow.addEventListener('benchpressComplete', ctrl.onComplete);
+            el[0].contentWindow.addEventListener('benchpressProgress', ctrl.onProgress);
             return;
           }
           if (elapsed >= timeout) {
@@ -34,6 +35,11 @@ angular.module('bpdIframeStreamerDirective', ['bpdRunStateService', 'bpdStatsSer
       stats.current = evt.result;
       $rootScope.$digest();
     };
-  }]);
 
+    this.onProgress = function(evt) {
+      stats.current = evt.result;
+      console.log(stats.current);
+      $rootScope.$digest();
+    }
+  }]);
 }());
