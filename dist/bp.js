@@ -78,81 +78,7 @@ Aggregator.prototype.calcStats = function() {
 di.annotate(Aggregator, new di.Inject(Measure, RunState, Statistics, Steps));
 module.exports = Aggregator;
 
-},{"./Measure":8,"./RunState":9,"./Statistics":11,"./Steps":12,"di":24}],2:[function(require,module,exports){
-var di = require('di');
-var Aggregator = require('./Aggregator');
-var Globals = require('./Globals');
-var Logger = require('./Logger');
-var Runner = require('./Runner');
-var RunState = require('./RunState');
-var Rx = require('rx');
-var Steps = require('./Steps');
-var Utils = require('./Utils');
-
-function AutoRunner(aggregator,globals,logger,runner,runState,steps,utils){
-  this._aggregator = aggregator;
-  this._globals = globals;
-  this._logger = logger;
-  this._runner = runner;
-  this._runState = runState;
-  this._utils = utils;
-  this._steps = steps;
-}
-
-AutoRunner.prototype.bootstrap = function() {
-  var parsed = this._utils.parseSearch(this._globals._window.location.search)
-  this._runState.setDefault(parsed);
-  if (parsed['__bpAutoClose__'] === 'true') {
-    this._runState.headless = true;
-  }
-};
-
-AutoRunner.prototype.ready = function () {
-  this._globals._window.setTimeout(function() {
-    this.runBenchmark(this._runState);
-  }.bind(this));
-};
-
-AutoRunner.prototype.runBenchmark = function(config) {
-  this.runAllTests().subscribe(function(update) {
-    this._logger.write(update);
-  }.bind(this), null, function() {
-    if (this._runState.headless === true) {
-      var benchpressComplete = new Event('benchpressComplete');
-      benchpressComplete.result = this.stats;
-      this._globals._window.dispatchEvent(benchpressComplete);
-      this._globals._window.close();
-    }
-  }.bind(this));
-};
-
-AutoRunner.prototype.runAllTests = function (iterations) {
-  this.subject = this.subject || new Rx.Subject();
-  iterations = typeof iterations === 'number' ? iterations : this._runState.iterations;
-  if (iterations--) {
-    this._steps.all().forEach(function(bs) {
-      var testResults = this._runner.runTimedTest(bs);
-      this._runState.recentResult[bs.name] = testResults;
-      this.subject.onNext({step: bs.name, results: testResults})
-    }.bind(this));
-    this.stats = this._aggregator.calcStats();
-    window.requestAnimationFrame(function() {
-      this.runAllTests(iterations);
-    }.bind(this));
-  }
-  else {
-    this.stats = this._aggregator.calcStats();
-    this.subject.onCompleted();
-    this.subject.dispose();
-    delete this.subject;
-  }
-  return this.subject;
-};
-
-di.annotate(AutoRunner, new di.Inject(Aggregator,Globals,Logger,Runner,RunState,Steps,Utils));
-module.exports = AutoRunner;
-
-},{"./Aggregator":1,"./Globals":5,"./Logger":7,"./RunState":9,"./Runner":10,"./Steps":12,"./Utils":13,"di":24,"rx":31}],3:[function(require,module,exports){
+},{"./Measure":6,"./RunState":7,"./Statistics":9,"./Steps":10,"di":22}],2:[function(require,module,exports){
 function ClientScripts () {
   this._scripts = [];
 }
@@ -175,7 +101,7 @@ ClientScripts.prototype.addMany = function(scripts) {
 
 module.exports = ClientScripts;
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var di = require('di');
 var ClientScripts = require('./ClientScripts');
 var Globals = require('./Globals');
@@ -292,13 +218,13 @@ di.annotate(Document, new di.Inject(Globals, RunState, ClientScripts, Utils));
 
 module.exports = Document;
 
-},{"./ClientScripts":3,"./Globals":5,"./RunState":9,"./Utils":13,"di":24,"rx":31}],5:[function(require,module,exports){
+},{"./ClientScripts":2,"./Globals":4,"./RunState":7,"./Utils":11,"di":22,"rx":29}],4:[function(require,module,exports){
 function Globals() {
   this._window = window;
 }
 
 module.exports = Globals;
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var di = require('di');
 var Aggregator = require('./Aggregator');
 var Document = require('./Document');
@@ -333,18 +259,7 @@ di.annotate(Report, new di.Inject(Aggregator, Document, Measure, RunState, Stati
 module.exports = Report;
 
 
-},{"./Aggregator":1,"./Document":4,"./Measure":8,"./RunState":9,"./Statistics":11,"./Steps":12,"di":24,"underscore":32}],7:[function(require,module,exports){
-function Logger() {
-
-}
-
-Logger.prototype.write = function(ln) {
-  console.log(ln);
-};
-
-module.exports = Logger;
-
-},{}],8:[function(require,module,exports){
+},{"./Aggregator":1,"./Document":3,"./Measure":6,"./RunState":7,"./Statistics":9,"./Steps":10,"di":22,"underscore":30}],6:[function(require,module,exports){
 
 function Measure(){
   this.characteristics = ['gcTime','testTime','garbageCount','retainedCount'];
@@ -362,7 +277,7 @@ Measure.prototype.numMilliseconds = function() {
 
 module.exports = Measure;
 
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 function RunState() {
   this.defaults = {
     iterations: 25,
@@ -396,7 +311,7 @@ RunState.prototype.setDefault = function(defaults) {
 
 module.exports = RunState;
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var di = require('di');
 var Aggregator = require('./Aggregator');
 var Document = require('./Document');
@@ -551,7 +466,7 @@ Runner.prototype.runTimedTest = function (bs) {
 di.annotate(Runner, new di.Inject(Aggregator, Document, Globals, Measure, Report, RunState, Steps));
 module.exports = Runner;
 
-},{"./Aggregator":1,"./Document":4,"./Globals":5,"./HtmlReport":6,"./Measure":8,"./RunState":9,"./Steps":12,"di":24,"rx":31}],11:[function(require,module,exports){
+},{"./Aggregator":1,"./Document":3,"./Globals":4,"./HtmlReport":5,"./Measure":6,"./RunState":7,"./Steps":10,"di":22,"rx":29}],9:[function(require,module,exports){
 function Statistics() {
   //Taken from z-table where confidence is 95%
   this.criticalValue = 1.96
@@ -592,7 +507,7 @@ Statistics.prototype.calculateStandardDeviation = function(sample, mean) {
 
 module.exports = Statistics;
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 function Steps() {
   this._steps = [];
 };
@@ -607,7 +522,7 @@ Steps.prototype.add = function (step) {
 
 module.exports = Steps;
 
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 
 function Utils() {}
 Utils.prototype.parseSearch = function (search) {
@@ -622,7 +537,7 @@ Utils.prototype.parseSearch = function (search) {
 
 module.exports = Utils;
 
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var di = require('di');
 var Utils = require('./Utils');
 var Globals = require('./Globals');
@@ -674,21 +589,20 @@ Variables.prototype.select = function (val) {
 di.annotate(Variables, new di.Inject(Utils, Globals))
 module.exports = Variables;
 
-},{"./Globals":5,"./Utils":13,"di":24}],15:[function(require,module,exports){
+},{"./Globals":4,"./Utils":11,"di":22}],13:[function(require,module,exports){
 var di = require('di');
 var ClientScripts = require('./ClientScripts');
 var Document = require('./Document');
 var Globals = require('./Globals');
 var Measure = require('./Measure');
 var Report = require('./HtmlReport');
-var AutoRunner = require('./AutoRunner');
+var Runner = require('./Runner');
 var Statistics = require('./Statistics');
 var Steps = require('./Steps');
 var Variables = require('./Variables');
 
 //Benchpress Facade
-function AutoBenchPress (doc, globals, measure, report, runner, scripts, statistics, steps, variables) {
-  doc.setAutoRun(true);
+function BenchPress (doc, globals, measure, report, runner, scripts, statistics, steps, variables) {
   // Left benchmarkSteps on global for backwards-compatibility
   //Deprecated
   window.benchmarkSteps = this.steps = steps.all();
@@ -699,6 +613,7 @@ function AutoBenchPress (doc, globals, measure, report, runner, scripts, statist
   this.scripts = scripts.all();
   this.doc = doc;
   this.variables = variables;
+
 
   //Legacy Support
   this.Document = doc;
@@ -712,14 +627,14 @@ function AutoBenchPress (doc, globals, measure, report, runner, scripts, statist
   }.bind(this));
 }
 
-di.annotate(AutoBenchPress, new di.Inject(Document, Globals, Measure, Report, AutoRunner, ClientScripts, Statistics, Steps, Variables))
+di.annotate(BenchPress, new di.Inject(Document, Globals, Measure, Report, Runner, ClientScripts, Statistics, Steps, Variables))
 
 var injector = new di.Injector([]);
-window.bp = injector.get(AutoBenchPress);
+window.bp = injector.get(BenchPress);
 
-module.exports = AutoBenchPress;
+module.exports = BenchPress;
 
-},{"./AutoRunner":2,"./ClientScripts":3,"./Document":4,"./Globals":5,"./HtmlReport":6,"./Measure":8,"./Statistics":11,"./Steps":12,"./Variables":14,"di":24}],16:[function(require,module,exports){
+},{"./ClientScripts":2,"./Document":3,"./Globals":4,"./HtmlReport":5,"./Measure":6,"./Runner":8,"./Statistics":9,"./Steps":10,"./Variables":12,"di":22}],14:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1022,7 +937,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],17:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1110,7 +1025,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],18:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 var __moduleName = "annotations";
 var isFunction = $diTraceurRuntime.assertObject(require('./util')).isFunction;
@@ -1263,7 +1178,7 @@ module.exports = {
   __esModule: true
 };
 
-},{"./util":23}],19:[function(require,module,exports){
+},{"./util":21}],17:[function(require,module,exports){
 "use strict";
 var __moduleName = "index";
 var $__injector__ = require('./injector');
@@ -1296,7 +1211,7 @@ module.exports = {
   __esModule: true
 };
 
-},{"./annotations":18,"./injector":20}],20:[function(require,module,exports){
+},{"./annotations":16,"./injector":18}],18:[function(require,module,exports){
 "use strict";
 var __moduleName = "injector";
 var $__4 = $diTraceurRuntime.assertObject(require('./annotations')),
@@ -1529,7 +1444,7 @@ module.exports = {
   __esModule: true
 };
 
-},{"./annotations":18,"./profiler":21,"./providers":22,"./util":23}],21:[function(require,module,exports){
+},{"./annotations":16,"./profiler":19,"./providers":20,"./util":21}],19:[function(require,module,exports){
 "use strict";
 var __moduleName = "profiler";
 var globalCounter = 0;
@@ -1544,7 +1459,7 @@ module.exports = {
   __esModule: true
 };
 
-},{}],22:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 var __moduleName = "providers";
 var $__3 = $diTraceurRuntime.assertObject(require('./annotations')),
@@ -1640,7 +1555,7 @@ module.exports = {
   __esModule: true
 };
 
-},{"./annotations":18,"./util":23}],23:[function(require,module,exports){
+},{"./annotations":16,"./util":21}],21:[function(require,module,exports){
 "use strict";
 var __moduleName = "util";
 function isUpperCase(char) {
@@ -1687,7 +1602,7 @@ module.exports = {
   __esModule: true
 };
 
-},{}],24:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // This is the file that gets included when you use "di" module in Node.js.
 
 // Include Traceur runtime.
@@ -1701,7 +1616,7 @@ if (typeof Map === 'undefined') {
 
 module.exports = require('../dist/cjs/index');
 
-},{"../dist/cjs/index":19,"es6-shim":25,"traceur/bin/traceur-runtime":26}],25:[function(require,module,exports){
+},{"../dist/cjs/index":17,"es6-shim":23,"traceur/bin/traceur-runtime":24}],23:[function(require,module,exports){
 (function (global){
 // ES6-shim 0.9.3 (c) 2013-2014 Paul Miller (http://paulmillr.com)
 // ES6-shim may be freely distributed under the MIT license.
@@ -2982,7 +2897,7 @@ module.exports = require('../dist/cjs/index');
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],26:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function (process,global){
 (function(global) {
   'use strict';
@@ -4388,7 +4303,7 @@ DITraceurSystem.register("traceur-runtime@0.0.33/src/runtime/polyfill-import", [
 DITraceurSystem.get("traceur-runtime@0.0.33/src/runtime/polyfill-import" + '');
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":17}],27:[function(require,module,exports){
+},{"_process":15}],25:[function(require,module,exports){
 (function (process,global){
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
@@ -13882,7 +13797,7 @@ DITraceurSystem.get("traceur-runtime@0.0.33/src/runtime/polyfill-import" + '');
 }.call(this));
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":17}],28:[function(require,module,exports){
+},{"_process":15}],26:[function(require,module,exports){
 (function (process,global){
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
@@ -18478,7 +18393,7 @@ DITraceurSystem.get("traceur-runtime@0.0.33/src/runtime/polyfill-import" + '');
 }.call(this));
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":17}],29:[function(require,module,exports){
+},{"_process":15}],27:[function(require,module,exports){
 (function (global){
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
@@ -18554,7 +18469,7 @@ DITraceurSystem.get("traceur-runtime@0.0.33/src/runtime/polyfill-import" + '');
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./rx":28}],30:[function(require,module,exports){
+},{"./rx":26}],28:[function(require,module,exports){
 (function (global){
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
@@ -19088,7 +19003,7 @@ var ReactiveTest = Rx.ReactiveTest = {
 }));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./rx.all":27}],31:[function(require,module,exports){
+},{"./rx.all":25}],29:[function(require,module,exports){
 var Rx = require('./dist/rx.all');
 require('./dist/rx.sorting');
 require('./dist/rx.testing');
@@ -19264,7 +19179,7 @@ Rx.Node = {
 
 module.exports = Rx;
 
-},{"./dist/rx.all":27,"./dist/rx.sorting":29,"./dist/rx.testing":30,"events":16}],32:[function(require,module,exports){
+},{"./dist/rx.all":25,"./dist/rx.sorting":27,"./dist/rx.testing":28,"events":14}],30:[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -20609,4 +20524,4 @@ module.exports = Rx;
   }
 }).call(this);
 
-},{}]},{},[15]);
+},{}]},{},[13]);
