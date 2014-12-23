@@ -28,21 +28,6 @@ angular.module('benchpressDashboard').
       value: 'profile'
     }];
 
-    //TODO: get from a service
-    $scope.steps = [{
-      name: 'create',
-      description: 'Create the view',
-    },{
-      name: 'apply',
-      description: 'apply the scope'
-    },{
-      name: 'destroy',
-      description: 'destroy scope and view'
-    }];
-
-    //TODO: get from service
-    $scope.measurements = ['testTime', 'gcTime', 'garbageCount', 'retainedCount'];
-
     benchmarksService.get({cacheOk: true}).then(function() {
       benchmarksService.select($routeParams.name);
     });
