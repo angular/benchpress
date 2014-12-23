@@ -6,6 +6,7 @@ angular.module('benchpressDashboard', [
     'bpdRunStateService',
     'bpdStatsService',
     'bpdTableReportDirective',
+    'bpdScriptsService',
     'ngRoute'
   ]).
   config(['$routeProvider', function($routeProvider) {
