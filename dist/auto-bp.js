@@ -116,6 +116,9 @@ AutoRunner.prototype.ready = function () {
 AutoRunner.prototype.runBenchmark = function(config) {
   this.runAllTests().subscribe(function(update) {
     this._logger.write(update);
+    var benchpressProgress = new Event('benchpressProgress');
+    benchpressProgress.result = update.result;
+    this._globals._window.dispatchEvent(benchpressProgress);
   }.bind(this), null, function() {
     if (this._runState.headless === true) {
       var benchpressComplete = new Event('benchpressComplete');
@@ -133,13 +136,11 @@ AutoRunner.prototype.runAllTests = function (iterations) {
     this._steps.all().forEach(function(bs) {
       var testResults = this._runner.runTimedTest(bs);
       this._runState.recentResult[bs.name] = testResults;
-      this.subject.onNext({step: bs.name, results: testResults})
+
     }.bind(this));
     this.stats = this._aggregator.calcStats();
-    //TODO: refactor observable to make this cleaner
-    var benchpressProgress = new Event('benchpressProgress');
-    benchpressProgress.result = this.stats;
-    this._globals._window.dispatchEvent(benchpressProgress);
+    this.subject.onNext({result: this.stats});
+
     window.requestAnimationFrame(function() {
       this.runAllTests(iterations);
     }.bind(this));
